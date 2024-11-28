@@ -18,7 +18,7 @@ const theme = createTheme({
     }),
     Kbd: Kbd.extend({
       classNames: {
-        root: 'text-[0.87rem] px-[8px] text-gray-500',
+        root: 'text-[0.87rem] px-[8px] text-gray-400',
       },
     }),
   },
@@ -26,7 +26,7 @@ const theme = createTheme({
 
 export const WithMantine = (component: () => ReactNode) => () => {
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications />
       {component()}
     </MantineProvider>

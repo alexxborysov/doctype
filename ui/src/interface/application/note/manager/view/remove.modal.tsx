@@ -21,12 +21,12 @@ export const RemoveModal = (props: Props) => {
       opened={props.opened}
       onClose={props.onClose}
       overlayProps={{
-        backgroundOpacity: 0.04,
-        blur: 0.5,
+        backgroundOpacity: 0.07,
+        blur: 0.6,
       }}
       classNames={{
         root: 'flex flex-col',
-        body: 'bg-[#FAFBFF]',
+        body: 'bg-bgSecondary',
       }}
       transitionProps={{ duration: 0 }}
       withCloseButton={false}
@@ -38,7 +38,7 @@ export const RemoveModal = (props: Props) => {
     >
       <FocusTrap.InitialFocus />
 
-      <p className="text-lg font-medium text-wrap whitespace-pre-wrap">
+      <p className="text-lg font-medium text-wrap whitespace-pre-wrap mb-2">
         Are you sure you want to delete '{props.note.name}'?
       </p>
       <p className="text-sm mb-2">This action cannot be undone.</p>
@@ -48,7 +48,7 @@ export const RemoveModal = (props: Props) => {
           size="sm"
           variant="outline"
           classNames={{
-            root: 'w-fit min-w-[28%]',
+            root: 'w-fit min-w-[30%]',
           }}
           onClick={props.onClose}
         >
@@ -58,11 +58,11 @@ export const RemoveModal = (props: Props) => {
           onClick={removeEffect}
           size="sm"
           classNames={{
-            root: 'w-fit min-w-[28%]',
+            root: 'w-fit min-w-[30%]',
           }}
         >
           Remove
-          <span className="text-white text-center font-bold ml-[10px] border-[1px] border-solid border-white/20 bg-white/10 pl-[7px] pr-[9px] pt-[2.5px] pb-[1.5px] rounded">
+          <span className="text-white text-center font-bold ml-[13px] border-[1px] border-solid border-white/20 bg-white/10 pl-[8px] pr-[10px] pt-[2.5px] pb-[1.5px] rounded">
             ⏎
           </span>
         </Button>

@@ -7,19 +7,16 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: 'rga(35, 39, 47)',
-        secondary: 'rgb(64, 71, 86)',
-
-        accent: '#007AFF',
-        danger: '#E03131',
-
-        fontPrimary: 'rga(35, 39, 47)',
-        fontSecondary: 'rgba(51, 51, 51, 0.7)',
-
-        bgPrimary: '#f7f7fa',
-
-        borderDark: '#E7E7E7',
-        borderLight: 'rgb(229 231 235 / 0.7)',
+        primary: '#74C0FC',
+        secondary: 'rgba(64, 71, 86, 1)',
+        accent: '#1871C2',
+        danger: '#ff6b6b',
+        fontPrimary: '#FFFFFF',
+        fontSecondary: '#828282',
+        bgPrimary: '#1F1F1F',
+        bgSecondary: '#2e2e2e',
+        borderDark: '#424242',
+        borderLight: '#424242',
       },
       fontSize: {
         sm: '0.75rem',

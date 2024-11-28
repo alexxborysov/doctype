@@ -1,4 +1,4 @@
-import { InfoCircledIcon, Pencil2Icon, PlusIcon } from '@radix-ui/react-icons';
+import { InfoCircledIcon, Pencil2Icon, DashboardIcon } from '@radix-ui/react-icons';
 import { observer } from 'mobx-react-lite';
 import { AppActionButton } from '~/interface/shared/view/buttons/action';
 import { Icon } from '~/interface/shared/view/icon';
@@ -16,7 +16,7 @@ export const AppNavigation = observer(() => {
       <section className="space-y-2 flex flex-col grow">
         <NavigationButton
           pushTo="/"
-          content={<Icon name="home" className="w-[1.11rem] h-[1.11rem] text-accent" />}
+          content={<DashboardIcon className="w-[1.11rem] h-[1.11rem] text-accent" />}
           ariaLabel="home"
         />
 

@@ -4,13 +4,11 @@ import dayjs from 'dayjs';
 import { observer } from 'mobx-react-lite';
 import { type MouseEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { preparePreview } from '~/interface/shared/lib/prepare-preview';
 import { Icon } from '~/interface/shared/view/icon';
 
 import { type Note } from 'core/src/domain/note/types';
 
 import { Name } from '../../rename/view';
-import './preview.css';
 import { RemoveModal } from './remove.modal';
 
 export const Preview = observer((props: Note) => {
@@ -33,22 +31,16 @@ export const Preview = observer((props: Note) => {
     <li className="flex flex-col items-center">
       <Paper
         ref={paperRef}
-        withBorder
         onClick={openNote}
         shadow={(hovered && 'xs') || undefined}
         classNames={{
           root: 'overflow-hidden min-w-[15.6rem] min-h-[11.5rem] h-[11.5rem] max-w-[15.6rem] max-h-[11.5rem] mb-[7px] cursor-pointer relative border-solid border-[1px] border-borderDark overflow-hidden px-3 pt-2 py-[6px]',
         }}
       >
-        <div
-          className="tiptap-preview"
-          dangerouslySetInnerHTML={{ __html: preparePreview(props.source) }}
-        />
-
         {(hovered || removeModalOpened) && (
           <CloseButton
             onClick={openRemoveModal}
-            className="absolute top-[6px] right-[6px] overflow-hidden bg-white"
+            className="absolute top-[6px] right-[6px] overflow-hidden"
             icon={
               <Icon
                 name="trash"

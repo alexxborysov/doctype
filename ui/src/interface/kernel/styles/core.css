@@ -28,7 +28,7 @@ select:-webkit-autofill:focus {
   -webkit-text-fill-color: rgb(30, 30, 30) !important;
   -webkit-box-shadow: rgb(30, 30, 30) !important;
   box-shadow: rgb(30, 30, 30) !important;
-  color: rgb(30, 30, 30) !important;
+  color: white !important;
   font-size: 0.82rem;
 }
 
@@ -56,13 +56,13 @@ body {
 
 body {
   font-size: 1rem;
-  color: #333333;
-  background: white;
   min-height: 100vh;
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   overflow-anchor: none;
   margin: 0;
+
+  @apply text-fontPrimary bg-bgPrimary;
 }
 
 input {

@@ -14,7 +14,7 @@ export const GoogleButton = () => {
   return (
     <Button
       variant="white"
-      classNames={{ root: 'hover:bg-gray-100/40 bg-gray-100/40 px-4' }}
+      classNames={{ root: 'hover:bg-bgSecondary bg-bgSecondary/70 px-4' }}
       size="md"
       onClick={() => login()}
     >
@@ -38,7 +38,7 @@ export const GithubButton = () => {
   return (
     <Button
       variant="white"
-      classNames={{ root: 'hover:bg-gray-100/40 bg-gray-100/40 px-4' }}
+      classNames={{ root: 'hover:bg-bgSecondary bg-bgSecondary/70 px-4' }}
       size="md"
       onClick={redirect}
     >
@@ -46,7 +46,7 @@ export const GithubButton = () => {
         <BaseLoader color="blue" size="md" />
       ) : (
         <div className="flex items-center justify-center">
-          <Icon name="github" className="w-5 h-5 text-black/90" />
+          <Icon name="github" className="w-5 h-5 text-white/80" />
         </div>
       )}
     </Button>
