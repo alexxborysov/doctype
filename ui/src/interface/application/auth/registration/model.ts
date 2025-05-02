@@ -1,12 +1,10 @@
 import type { User } from '@prisma/client';
+import { SignUpDto } from 'core';
 import { makeAutoObservable } from 'mobx';
 import { z } from 'zod';
-import { createEffect } from '~/interface/shared/lib/create-effect';
+import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
 import { signInViewModel, SignInViewModelInterface } from '~/interface/view/sign-in/model';
-
-import { SignUpDto } from 'core/src/domain/auth/validation';
-
 import { api } from './api';
 import { Step } from './types';
 import { VerificationSchema } from './validation';
@@ -35,11 +33,11 @@ class RegistrationModel {
   signUp = createEffect(async (creds: z.infer<typeof SignUpDto>) => {
     const query = await api.signUp({ data: creds });
 
-    if (query?.data) {
-      this.upsertCredentials(query.data.createdUser);
+    if (query?.success) {
+      this.upsertCredentials(query.success.createdUser);
       this.changeStep('verification');
     } else {
-      throw new Error(query.error?.response?.data.message);
+      throw new EffectError(query.error?.response?.data.message);
     }
   });
 
@@ -48,13 +46,13 @@ class RegistrationModel {
       data: { code: payload.code, email: this.credentials?.email ?? '' },
     });
 
-    if (query.data) {
+    if (query.success) {
       notifications.accountCreated();
 
       this.signInViewModel.changeTab('log-in');
       this.changeStep('receiving-credentials');
     } else {
-      throw new Error(query.error?.response?.data.message);
+      throw new EffectError(query.error?.response?.data.message);
     }
   });
 }

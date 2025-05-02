@@ -1,7 +1,7 @@
 import { m } from 'framer-motion';
 import { lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-
+import { NoteId } from '~/domain/note';
 import { notesManagerModel } from '../application/note/manager/model';
 import { NoteSourceModel } from '../application/note/source/model';
 import { router } from '../kernel/router/mod.router';
@@ -18,8 +18,6 @@ export const Editor = () => {
   if (!noteId?.length) {
     router.navigate('/');
     notifications.noteNotFound();
-
-    return <></>;
   }
 
   return (
@@ -33,7 +31,9 @@ export const Editor = () => {
       className="flex w-full px-[1%] lg:px-[2%] items-start justify-center relative min-h-[95vh]"
     >
       <Suspense fallback={<BaseLoader position="centered" className="-mt-[3vh]" />}>
-        <EditorView noteSourceModel={new NoteSourceModel({ id: noteId }, notesManagerModel)} />
+        <EditorView
+          noteSourceModel={new NoteSourceModel({ id: noteId as NoteId }, notesManagerModel)}
+        />
       </Suspense>
     </m.main>
   );

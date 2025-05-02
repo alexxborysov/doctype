@@ -7,16 +7,17 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: '#74C0FC',
-        secondary: 'rgba(64, 71, 86, 1)',
-        accent: '#1871C2',
+        background: '#1c2128',
+        foreground: '#FFFFFF',
+
+        secondary: '#161b22',
+
+        accent: '#22d3ee',
         danger: '#ff6b6b',
-        fontPrimary: '#FFFFFF',
-        fontSecondary: '#828282',
-        bgPrimary: '#1F1F1F',
-        bgSecondary: '#2e2e2e',
-        borderDark: '#424242',
-        borderLight: '#424242',
+
+        bgSecondary: 'oklch(27.4% 0.006 286.033)',
+
+        border: '#424242',
       },
       fontSize: {
         sm: '0.75rem',

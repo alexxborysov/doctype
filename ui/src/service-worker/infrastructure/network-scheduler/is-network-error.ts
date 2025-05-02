@@ -1,6 +1,8 @@
 import { AxiosError } from 'axios';
+import { Option } from 'core';
+import { ApiErrorData } from '~/interface/shared/types/common';
 
-export function isNetworkError(error: AxiosError<ApiErrorData, any> | undefined) {
+export function isNetworkError(error: Option<AxiosError<ApiErrorData, any>>) {
   if (!error?.code) return false;
   return (
     error.code === 'ERR_NETWORK' ||

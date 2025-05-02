@@ -1,24 +1,21 @@
+import { Option } from 'core';
 import dayjs from 'dayjs';
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
+import { Note, NOTE_MESSAGES, NoteId, NoteName, NoteSource } from '~/domain/note';
 import { serviceWorkerState } from '~/interface/kernel/network/sw-state';
-import { createEffect } from '~/interface/shared/lib/create-effect';
+import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
+import { DEVELOPMENT_TEMPLATE } from '~/interface/view/editor/templates/development.template';
 import { DEVOPS_DEPLOY_TEMPLATE } from '~/interface/view/editor/templates/devops.template';
-import { MOBX_TEMPLATE } from '~/interface/view/editor/templates/mobx.templates';
-import { getNoteTemplate } from '~/interface/view/editor/templates/note.template';
-import { PROPOSAL_TEMPLATE } from '~/interface/view/editor/templates/proposal.template';
-
-import { type Note } from 'core/src/domain/note/types';
-import { NETWORK_MESSAGES } from 'core/src/infrastructure/networking/channel-messaging';
-
-import { sessionModel, SessionModelInterface } from '../../session/model';
+import { getDefaultNoteTemplate } from '~/interface/view/editor/templates/note.template';
+import { viewerModel, ViewerModelInterface } from '../../viewer/model';
 import { api } from './api';
 
 class NotesManagerModel {
   pool: Note[] = [];
-  lasOpenedNote: Note['id'] | null = null;
+  lasOpenedNoteId: Option<NoteId> = null;
 
-  constructor(private sessionModel: SessionModelInterface) {
+  constructor(private sessionModel: ViewerModelInterface) {
     makeAutoObservable(this);
     this.init.run();
   }
@@ -27,24 +24,25 @@ class NotesManagerModel {
     await serviceWorkerState.activated;
 
     this.pull.run();
-    this.lasOpenedNote = localStorage.getItem('last-opened-note');
+    this.lasOpenedNoteId = lastOpened.get();
 
     reaction(
-      () => this.sessionModel.session,
+      () => this.sessionModel.viewer,
       () => this.pullCloud.run()
     );
   });
 
   create = createEffect(async (payload?: Pick<Note, 'name' | 'source'> | void) => {
-    const name = payload?.name ?? 'Note: ' + '~' + dayjs().format('ss').toString();
-    const query = await api.create({
-      data: {
-        name,
-        source: payload?.source ?? getNoteTemplate({ name, date: dayjs().toString() }),
-      },
+    const name = payload?.name ?? generateNoteName();
+    const note = {
+      name,
+      source: payload?.source ?? getDefaultNoteTemplate({ name, date: dayjs().toString() }),
+    } as Note;
+    const createQuery = await api.create({
+      data: note,
     });
 
-    if (query.data?.ok) {
+    if (createQuery.success?.ok) {
       this.pull.run();
     } else {
       notifications.noteNotCreated();
@@ -56,7 +54,7 @@ class NotesManagerModel {
       data: meta,
     });
 
-    if (query.data?.ok) {
+    if (query.success?.ok) {
       this.pull.run();
     } else {
       notifications.noteNotRemoved();
@@ -66,50 +64,73 @@ class NotesManagerModel {
   pull = createEffect(async () => {
     const query = await api.pull();
 
-    if (query.data?.items) {
+    if (query.success?.items) {
       runInAction(() => {
-        this.pool = query.data!.items;
+        this.pool = query.success!.items;
       });
     } else {
-      throw new Error(query.error?.response?.data.message);
+      throw new EffectError(query.error?.response?.data.message);
     }
   });
 
   pullCloud = createEffect(async () => {
-    const session = this.sessionModel.session;
+    const session = this.sessionModel.viewer;
     if (!session) {
-      throw new Error('session is not defined');
+      throw new EffectError('session is not defined');
     }
 
     const query = await api.pullCloud();
-    if (query.data?.ok && query.data.updated) {
+    if (query.success?.ok && query.success.updated) {
       runInAction(() => {
-        this.pool = query.data!.items;
+        this.pool = query.success!.items;
       });
       notifications.receivedCloudUpdates();
     } else {
-      throw new Error(query.error?.response?.data.message);
+      throw new EffectError(query.error?.response?.data.message);
     }
   });
 
   setLastOpenedNote(id: Note['id']) {
-    this.lasOpenedNote = id;
+    this.lasOpenedNoteId = id;
     localStorage.setItem('last-opened-note', id);
   }
 
   generateSample = createEffect(async () => {
-    this.create.run({ name: 'Learn Mobx', source: MOBX_TEMPLATE });
-    this.create.run({ name: 'Proposal: Safe Assignment Operator', source: PROPOSAL_TEMPLATE });
-    this.create.run({ name: 'DevOps: Deploy Notes', source: DEVOPS_DEPLOY_TEMPLATE });
+    this.create.run(SAMPLE_TEMPLATES.Development);
+    this.create.run(SAMPLE_TEMPLATES.DevOps);
   });
 }
 
-export const notesManagerModel = new NotesManagerModel(sessionModel);
+export const notesManagerModel = new NotesManagerModel(viewerModel);
 
 navigator.serviceWorker.addEventListener('message', ({ data: key }) => {
-  if (key === NETWORK_MESSAGES.SAVED_TO_CLOUD) {
+  if (key === NOTE_MESSAGES.SAVED_TO_CLOUD) {
     notifications.progressSavedToCloud();
   }
 });
+
+export const lastOpened = {
+  get() {
+    return localStorage.getItem('last-opened-note-id') as NoteId;
+  },
+  set(id: NoteId) {
+    return localStorage.setItem('last-opened-note-id', id);
+  },
+};
+
+export function generateNoteName() {
+  return ('Note: ' + '~' + dayjs().format('ss').toString()) as NoteName;
+}
+
+export const SAMPLE_TEMPLATES = {
+  Development: {
+    name: 'Development' as NoteName,
+    source: DEVELOPMENT_TEMPLATE as NoteSource,
+  },
+  DevOps: {
+    name: 'DevOps: Deploy Notes' as NoteName,
+    source: DEVOPS_DEPLOY_TEMPLATE as NoteSource,
+  },
+};
 
 export type NoteManagerModelInterface = NotesManagerModel;

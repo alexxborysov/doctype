@@ -24,6 +24,7 @@
 
       p {
         padding-left: 3px;
+        margin-top: -1px;
       }
 
       label {
@@ -36,16 +37,18 @@
           margin-right: 5px;
           margin-top: 2.5px;
 
-          background-color: #fff;
-          border: 1px solid #ced4da;
           border-radius: 4px;
 
           position: relative;
+
+          @apply bg-cyan-100 border-border border;
         }
 
         input:checked {
           background-color: #339af0;
           border-color: #339af0;
+
+          @apply bg-cyan-500 border-cyan-700 border;
         }
 
         input:checked::after {
@@ -61,7 +64,7 @@
         }
 
         input:hover {
-          border-color: #339af0;
+          @apply border-cyan-600;
         }
       }
     }
@@ -107,44 +110,36 @@
     text-wrap: pretty;
 
     &:first-child {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
     }
   }
 
   h1 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 12px;
   }
 
   h3 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-top: 9px;
     margin-bottom: 7px;
   }
 
-  code {
-    background: linear-gradient(to right, #e0fffa, #e0fffa);
-    border-radius: 4px;
-    color: black;
-    font-size: 0.82rem;
-    font-family: 'JetBrainsMono', monospace;
-    padding: 0.28em 0.4em;
+  pre {
+    background-color: #161b22;
+    border-radius: 6px;
+    padding: 16px;
+    overflow: auto;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #c9d1d9;
   }
 
-  pre {
-    background: linear-gradient(to right, #e0fffa, #e0fffa);
-    border-radius: 8px;
-    color: #333;
-    font-family: 'JetBrainsMono', monospace;
-    margin: 1.4rem 0;
-    padding: 0.75rem 1.55rem 0.75rem 1rem;
-    overflow-x: auto;
-    code {
-      background: none;
-      color: inherit;
-      font-size: 0.83rem;
-      padding: 0;
-    }
+  code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    color: #c9d1d9;
   }
 
   a {
@@ -163,11 +158,14 @@
   overflow: auto;
 }
 
+/* Comments and quotes */
 .hljs-comment,
 .hljs-quote {
-  color: #6a737d; /* Gray for comments and quotes */
+  color: #8b949e;
+  font-style: italic;
 }
 
+/* Variables, attributes, tags, etc. */
 .hljs-variable,
 .hljs-template-variable,
 .hljs-attribute,
@@ -177,9 +175,10 @@
 .hljs-link,
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #d73a49; /* Soft red for variables, attributes, tags, etc. */
+  color: #ff7b72;
 }
 
+/* Numbers, literals, and types */
 .hljs-number,
 .hljs-meta,
 .hljs-built_in,
@@ -187,31 +186,54 @@
 .hljs-literal,
 .hljs-type,
 .hljs-params {
-  color: #005cc5; /* Light blue for numbers, literals, and types */
+  color: #79c0ff;
 }
 
+/* Strings and symbols */
 .hljs-string,
 .hljs-symbol,
 .hljs-bullet {
-  color: #032f62; /* Dark blue for strings and symbols */
+  color: #a5d6ff;
 }
 
+/* Titles, sections, and functions */
 .hljs-title,
-.hljs-section {
-  color: #6f42c1; /* Purple for titles and sections */
+.hljs-section,
+.hljs-function {
+  color: #d2a8ff;
+  font-weight: 600;
 }
 
+/* Keywords and selector tags */
 .hljs-keyword,
 .hljs-selector-tag {
-  color: #d73a49; /* Soft red for keywords and selector tags */
+  color: #ff7b72;
+  font-weight: 600;
 }
 
+/* Operators */
+.hljs-operator {
+  color: #c9d1d9;
+}
+
+/* Properties */
+.hljs-property {
+  color: #f0883e;
+}
+
+/* Emphasis */
 .hljs-emphasis {
-  font-style: italic; /* Italicize for emphasis */
+  font-style: italic;
 }
 
+/* Strong emphasis */
 .hljs-strong {
-  font-weight: 700; /* Bold for strong emphasis */
+  font-weight: 700;
+}
+
+/* Line highlighting (optional) */
+.hljs-line-highlight {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .ProseMirror-focused {

@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import { z } from 'zod';
 import { Form } from '~/interface/shared/view/form';
 import { Input } from '~/interface/shared/view/input';
-
 import { GithubButton, GoogleButton } from '../oauth/view';
 import { registrationModel } from './model';
 import { SignUpSchema, VerificationSchema } from './validation';
@@ -25,7 +24,7 @@ const SignUpForm = observer(() => {
     <Form
       onSubmit={handleSubmit}
       schema={SignUpSchema}
-      errorMessage={registrationModel.signUp.meta.error?.message}
+      errorMessage={registrationModel.signUp.meta.error?.payload?.message}
       isLoading={registrationModel.signUp.meta.status === 'pending'}
       submitText="Register"
       className="w-full"
@@ -54,7 +53,7 @@ const VerificationForm = observer(() => {
       onSubmit={handleSubmit}
       schema={VerificationSchema}
       isLoading={registrationModel.verify.meta.status === 'pending'}
-      errorMessage={registrationModel.verify.meta.error?.message}
+      errorMessage={registrationModel.verify.meta.error?.payload?.message}
       submitText="Apply"
       className="w-full"
       leftSubmitSlot={

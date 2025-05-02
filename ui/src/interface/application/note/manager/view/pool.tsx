@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useLayoutEffect } from 'react';
 import { QuickStart } from '~/interface/view/quick-start';
-
 import { notesManagerModel } from '../model';
 import { Preview } from './preview';
 

@@ -1,6 +1,5 @@
+import { SignUpDto, VerificationDto } from 'core';
 import { z } from 'zod';
-
-import { SignUpDto, VerificationDto } from 'core/src/domain/auth/validation';
 
 export const SignUpSchema = SignUpDto.extend({
   confirm: z.string().min(6, { message: 'Password confirmation must be longer' }),

@@ -3,9 +3,6 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { twJoin } from 'tailwind-merge';
-
-import { type Note } from 'core/src/domain/note/types';
-
 import { notesManagerModel } from '../manager/model';
 
 export const Search = observer(() => {
@@ -27,8 +24,8 @@ export const Search = observer(() => {
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const openNote = (selected: Note['id'] & string) => {
-    navigate('/notes/' + selected);
+  const openNote = (selectedNoteId: string) => {
+    navigate('/notes/' + selectedNoteId);
   };
 
   useEffect(() => {
@@ -81,7 +78,9 @@ export const Search = observer(() => {
           placeholder="Search.."
           aria-label="search-input"
           size="xs"
-          classNames={{ input: 'min-w-[210px] transition-none' }}
+          classNames={{
+            input: 'min-w-[210px]',
+          }}
           rightSection={<Kbd dropdownOpened={combobox.dropdownOpened} />}
           rightSectionWidth={53}
         />
@@ -108,7 +107,7 @@ function Kbd({ dropdownOpened }: { dropdownOpened: boolean }) {
   return (
     <p
       className={twJoin(
-        "flex items-center justify-center border-[1px] border-borderDark rounded bg-bgPrimary h-[18px] w-9 font-['JetBrainsMono'] font-black text-[11px] text-nowrap",
+        "flex items-center justify-center border-[1px] border-border rounded bg-background h-[18px] w-9 font-['JetBrainsMono'] font-black text-[11px] text-nowrap",
         dropdownOpened && 'opacity-65'
       )}
     >

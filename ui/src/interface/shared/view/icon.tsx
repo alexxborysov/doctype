@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, HTMLAttributes, memo } from 'react';
+import { IconName } from '../types/common';
 
 interface Props extends DetailedHTMLProps<HTMLAttributes<SVGSVGElement>, SVGSVGElement> {
   name: IconName;

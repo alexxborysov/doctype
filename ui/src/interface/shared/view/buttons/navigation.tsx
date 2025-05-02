@@ -59,7 +59,7 @@ const styles = cva(
     variants: {
       type: {
         transparent: ['bg-transparent'],
-        active: ['bg-bgSecondary'],
+        active: ['bg-zinc-700/70'],
       },
       size: {
         md: ['py-[8px] text-base min-w-[38px]'],

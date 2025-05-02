@@ -3,7 +3,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { Icon } from '~/interface/shared/view/icon';
 import { BaseLoader } from '~/interface/shared/view/loader';
-
 import { googleLogin } from './google';
 
 export const GoogleButton = () => {
@@ -14,7 +13,7 @@ export const GoogleButton = () => {
   return (
     <Button
       variant="white"
-      classNames={{ root: 'hover:bg-bgSecondary bg-bgSecondary/70 px-4' }}
+      classNames={{ root: 'hover:bg-zinc-600/20 bg-cyan-500/10 px-4' }}
       size="md"
       onClick={() => login()}
     >
@@ -38,7 +37,7 @@ export const GithubButton = () => {
   return (
     <Button
       variant="white"
-      classNames={{ root: 'hover:bg-bgSecondary bg-bgSecondary/70 px-4' }}
+      classNames={{ root: 'hover:bg-zinc-600/20 bg-cyan-500/10 px-4' }}
       size="md"
       onClick={redirect}
     >

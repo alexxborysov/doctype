@@ -1,9 +1,7 @@
+import { NOTE_MESSAGES } from '~/domain/note';
 import { LocalDB } from '~/service-worker/infrastructure/db/mod.db';
 import { swMessageChannel } from '~/service-worker/infrastructure/message-channel/mod.message-channel';
 import { authService } from '~/service-worker/services/auth.service';
-
-import { NETWORK_MESSAGES } from 'core/src/infrastructure/networking/channel-messaging';
-
 import { cloudApi } from './cloud.api';
 
 export async function claimNotesToSession() {
@@ -15,7 +13,7 @@ export async function claimNotesToSession() {
   try {
     const docs = await db.note.toArray();
     if (docs?.length) {
-      const unclaimed = docs.filter(({ userId }) => !userId);
+      const unclaimed = docs.filter(({ viewerId }) => !viewerId);
 
       for (const doc of unclaimed) {
         const created = await cloudApi.create({
@@ -27,9 +25,9 @@ export async function claimNotesToSession() {
 
         if (created.data?.ok) {
           db.note.update(doc.id, {
-            userId: session.current.id,
+            viewerId: session.current.id,
           });
-          swMessageChannel.post(NETWORK_MESSAGES.SAVED_TO_CLOUD);
+          swMessageChannel.post(NOTE_MESSAGES.SAVED_TO_CLOUD);
         }
       }
     }

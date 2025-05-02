@@ -3,7 +3,6 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import ListItem from '@tiptap/extension-list-item';
 import OrderedList from '@tiptap/extension-ordered-list';
 import StarterKit from '@tiptap/starter-kit';
-
 import { CodeBlockExtended } from './code-block';
 import { lowlight } from './lowlight';
 import { TaskItemExtended, TaskListExtended } from './task-list';

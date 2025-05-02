@@ -1,5 +1,4 @@
 import { m } from 'framer-motion';
-
 import { NotesPool } from '../application/note/manager/view/pool';
 import { Toolbar } from '../application/note/manager/view/toolbar';
 

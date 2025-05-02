@@ -1,6 +1,0 @@
-export const NETWORK_MESSAGES = {
-    ONLINE: 'NETWORK_ONLINE',
-    OFFLINE: 'NETWORK_OFFLINE',
-
-    SAVED_TO_CLOUD: 'SAVED_TO_CLOUD',
-} as const;

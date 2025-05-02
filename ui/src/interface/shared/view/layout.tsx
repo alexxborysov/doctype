@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
-
 import { BaseLoader } from './loader';
 
 interface Props {

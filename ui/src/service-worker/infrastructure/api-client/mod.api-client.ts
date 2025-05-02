@@ -1,8 +1,7 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
+import { AuthTokens } from '~/domain/auth';
+import { ApiClientResponse } from '~/interface/shared/types/common';
 import { authService } from '~/service-worker/services/auth.service';
-
-import { type Tokens } from 'core/src/domain/auth/types';
-
 import { ParsedRequest } from '../lib/request.parser';
 import fetchAdapter from './fetch.adapter';
 
@@ -38,7 +37,7 @@ function refreshTokens() {
       const storedTokens = await authService.getTokens();
       if (storedTokens?.refresh) {
         const refreshed = await instance
-          .request<Tokens>({
+          .request<AuthTokens>({
             url: REFRESH_TOKENS_API_PATH,
             method: 'GET',
             headers: {
@@ -70,15 +69,15 @@ function refreshTokens() {
 export const swApiClient = {
   async query<R>({ parsedRequest }: { parsedRequest: ParsedRequest }) {
     let _res: ApiClientResponse<R> = {
-      data: undefined,
-      error: undefined,
+      success: null,
+      error: null,
     };
 
     async function executeQuery(override?: AxiosRequestConfig) {
       await instance
         .request<R>({ ...parsedRequest, data: parsedRequest.payload, ...override })
-        .then((res) => (_res = { error: undefined, data: res.data }))
-        .catch((err) => (_res = { data: undefined, error: err }));
+        .then((res) => (_res = { error: null, success: res.data }))
+        .catch((err) => (_res = { success: null, error: err }));
     }
 
     await refreshQueryPromise;
@@ -90,8 +89,10 @@ export const swApiClient = {
     }
 
     return {
-      data: _res?.data,
+      data: _res?.success,
       error: _res?.error,
     };
   },
 };
+
+export type AnyPayload = Record<string, any>;

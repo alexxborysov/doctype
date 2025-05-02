@@ -1,10 +1,10 @@
 import { EditorContent, type EditorEvents, useEditor } from '@tiptap/react';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect } from 'react';
+import { NoteSource } from '~/domain/note';
 import { NoteSourceModel } from '~/interface/application/note/source/model';
 import { router } from '~/interface/kernel/router/mod.router';
 import { debounce } from '~/interface/shared/lib/debounce';
-
 import { extensions } from './extensions/extensions.config';
 import './styles.css';
 import { EditorToolbar } from './toolbar';
@@ -16,7 +16,8 @@ interface Props {
 export const EditorView = observer(({ noteSourceModel }: Props) => {
   const handleUpdate = useCallback(
     debounce((event: EditorEvents['update']) => {
-      noteSourceModel.updateSource.run(event.editor.getHTML());
+      const currentSource = event.editor.getHTML() as NoteSource;
+      noteSourceModel.updateSource.run(currentSource);
     }, 700),
     []
   );
@@ -28,7 +29,7 @@ export const EditorView = observer(({ noteSourceModel }: Props) => {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(noteSourceModel.source);
+    editor?.commands.setContent(noteSourceModel.source || '');
   }, [noteSourceModel.source]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import {
   SignUpDto,
   LoginDto,
   VerificationDto,
-} from 'core/dist-cjs/src/domain/auth/validation';
+} from 'core/dist-cjs/src/dto/auth.dto';
 import { ZodValidationPipe } from '~/kernel/pipes/zod.validation.pipe';
 import { AuthService } from '~/application/auth/services/auth.service';
 import { HashService } from '~/application/auth/services/hash.service';

@@ -12,11 +12,11 @@ import {
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles } from '../auth/guards/roles.decorator';
 import { ZodValidationPipe } from '~/kernel/pipes/zod.validation.pipe';
-import { NoteStrictSchema } from 'core/dist-cjs/src/domain/note/validation';
-import { z } from 'zod';
+import { NoteStrictSchema } from 'core/dist-cjs/src/dto/note.dto';
 import { DBService } from '~/infrastructure/db/db.service';
 import { AuthService } from '../auth/services/auth.service';
 import { Request } from 'express';
+import { z } from 'zod';
 import dayjs from 'dayjs';
 
 @Controller('note')

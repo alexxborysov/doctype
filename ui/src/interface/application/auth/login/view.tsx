@@ -1,10 +1,8 @@
+import { LoginDto } from 'core';
 import { observer } from 'mobx-react-lite';
 import { z } from 'zod';
 import { Form } from '~/interface/shared/view/form';
 import { Input } from '~/interface/shared/view/input';
-
-import { LoginDto } from 'core/src/domain/auth/validation';
-
 import { GithubButton, GoogleButton } from '../oauth/view';
 import { loginModel } from './model';
 
@@ -18,7 +16,7 @@ export const Login = observer(() => {
       onSubmit={handleLogin}
       schema={LoginDto}
       submitText="Log In"
-      errorMessage={loginModel.login.meta.error?.message}
+      errorMessage={loginModel.login.meta.error?.payload?.message}
       isLoading={loginModel.login.meta.status === 'pending'}
       className="w-full"
       leftSubmitSlot={

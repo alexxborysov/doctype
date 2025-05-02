@@ -1,5 +1,6 @@
-import { type User } from '@prisma/client';
 import { AxiosError } from 'axios';
+import { AuthTokens } from '~/domain/auth';
+import { Viewer } from '~/domain/viewer';
 import { swApiClient } from '~/service-worker/infrastructure/api-client/mod.api-client';
 import { parseRequestInstance } from '~/service-worker/infrastructure/lib/request.parser';
 import { networkScheduler } from '~/service-worker/infrastructure/network-scheduler/mod.network-scheduler';
@@ -9,22 +10,19 @@ import {
   prepareResponse,
 } from '~/service-worker/infrastructure/router/prepare-response';
 import { authService } from '~/service-worker/services/auth.service';
-
-import { type Tokens } from 'core/src/domain/auth/types';
-
 import { claimNotesToSession } from '../note/claim-to-session';
 
 async function loginHandler(ev: FetchEvent) {
   const clonedReq = ev.request.clone();
   const payload = clonedReq.body && (await clonedReq.json());
 
-  const query = await swApiClient.query<{ user: User; tokens: Tokens }>({
+  const query = await swApiClient.query<{ viewer: Viewer; tokens: AuthTokens }>({
     parsedRequest: parseRequestInstance(clonedReq, payload),
   });
 
   if (query.data) {
     await authService.updateTokens(query.data.tokens);
-    await authService.updateSession({ user: query.data.user });
+    await authService.updateSession({ viewer: query.data.viewer });
 
     await networkScheduler.execute();
     claimNotesToSession();
@@ -54,12 +52,12 @@ export function registerAuthRoutes() {
         return prepareErrorResponse(new AxiosError('Authorization Tokens is not defined'));
       }
 
-      const query = await swApiClient.query<{ user: User }>({
+      const query = await swApiClient.query<{ viewer: Viewer }>({
         parsedRequest: parseRequestInstance(ev.request),
       });
 
       if (query.data) {
-        await authService.updateSession({ user: query.data.user });
+        await authService.updateSession({ viewer: query.data.viewer });
         await claimNotesToSession();
 
         return prepareResponse(query.data);
@@ -73,13 +71,13 @@ export function registerAuthRoutes() {
     path: 'auth/exchange-github-token',
     handler: async (ev) => {
       const clonedReq = ev.request.clone();
-      const query = await swApiClient.query<{ tokens: Tokens }>({
+      const query = await swApiClient.query<{ tokens: AuthTokens }>({
         parsedRequest: parseRequestInstance(clonedReq),
       });
 
       if (query.data) {
-        const { access, refresh } = query.data.tokens;
-        await authService.updateTokens({ access, refresh });
+        const tokens = query.data.tokens;
+        await authService.updateTokens(tokens);
 
         return prepareResponse({ ok: true });
       } else {

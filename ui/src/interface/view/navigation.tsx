@@ -2,14 +2,13 @@ import { InfoCircledIcon, Pencil2Icon, DashboardIcon } from '@radix-ui/react-ico
 import { observer } from 'mobx-react-lite';
 import { AppActionButton } from '~/interface/shared/view/buttons/action';
 import { Icon } from '~/interface/shared/view/icon';
-
 import { notesManagerModel } from '../application/note/manager/model';
-import { SessionAction } from '../application/session/view';
+import { SessionAction } from '../application/viewer/view';
 import { useLocationArray } from '../kernel/router/use-location-array';
 import { NavigationButton } from '../shared/view/buttons/navigation';
 
 export const AppNavigation = observer(() => {
-  const lastOpenedNote = notesManagerModel.lasOpenedNote;
+  const lastOpenedNote = notesManagerModel.lasOpenedNoteId;
 
   return (
     <header className="py-[0.9rem] flex flex-col min-h-screen min-w-full">

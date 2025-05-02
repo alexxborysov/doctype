@@ -1,8 +1,6 @@
-import { type User } from '@prisma/client';
 import Dexie from 'dexie';
-
-import { type Note } from 'core/src/domain/note/types';
-
+import { Note } from '~/domain/note';
+import { Viewer } from '~/domain/viewer';
 import { type ParsedRequest } from '../lib/request.parser';
 
 export class LocalDB extends Dexie {
@@ -23,7 +21,7 @@ export class LocalDB extends Dexie {
   networkSchedulerRequest!: Dexie.Table<{ id: string; req: ParsedRequest }, string>;
   authTokens!: Dexie.Table<{ id: 'singleton'; access: string; refresh: string }, string>;
 
-  session!: Dexie.Table<{ id: 'singleton'; current: User }>;
+  session!: Dexie.Table<{ id: 'singleton'; current: Viewer }>;
 
   private constructor() {
     super('main_db');

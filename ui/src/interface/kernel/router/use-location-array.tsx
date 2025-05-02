@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { RoutePath } from '~/interface/shared/types/common';
 
 /**
  * @description

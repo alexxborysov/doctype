@@ -2,19 +2,18 @@ import { HttpStatusCode } from 'axios';
 import { makeAutoObservable } from 'mobx';
 import { z } from 'zod';
 import { router } from '~/interface/kernel/router/mod.router';
-import { createEffect } from '~/interface/shared/lib/create-effect';
+import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
 import { signInViewModel, SignInViewModelInterface } from '~/interface/view/sign-in/model';
-
-import { LoginDto } from 'core/src/domain/auth/validation';
-
-import { sessionModel, type SessionModelInterface } from '../../session/model';
+import { UNEXPECTED_ERROR_MESSAGE } from '~/service-worker/infrastructure/lib/error-message';
+import { LoginDto } from 'core/src';
+import { viewerModel, type ViewerModelInterface } from '../../viewer/model';
 import { registrationModel, RegistrationModelInterface } from '../registration/model';
 import { api } from './api';
 
 class LoginModel {
   constructor(
-    private sessionModel: SessionModelInterface,
+    private sessionModel: ViewerModelInterface,
     private registrationModel: RegistrationModelInterface,
     private signInViewModel: SignInViewModelInterface
   ) {
@@ -23,14 +22,14 @@ class LoginModel {
 
   login = createEffect(async (creds: z.infer<typeof LoginDto>) => {
     const query = await api.login({ data: creds });
-    const session = query.data?.user;
+    const viewer = query.success?.user;
 
-    if (session) {
-      this.sessionModel.upsert(session);
+    if (viewer) {
+      this.sessionModel.upsert(viewer);
     }
 
     const isVerificationNeeded = query.error?.status === HttpStatusCode.UpgradeRequired;
-    if (session && !isVerificationNeeded) {
+    if (viewer && !isVerificationNeeded) {
       router.navigate('/');
     }
 
@@ -43,9 +42,11 @@ class LoginModel {
     }
 
     if (!isVerificationNeeded && query.error) {
-      throw new Error(query.error?.response?.data?.message);
+      throw new EffectError({
+        message: query.error?.response?.data?.message || UNEXPECTED_ERROR_MESSAGE,
+      });
     }
   });
 }
 
-export const loginModel = new LoginModel(sessionModel, registrationModel, signInViewModel);
+export const loginModel = new LoginModel(viewerModel, registrationModel, signInViewModel);

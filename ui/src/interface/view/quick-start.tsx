@@ -2,7 +2,6 @@ import { Button, Kbd } from '@mantine/core';
 import { RocketIcon } from '@radix-ui/react-icons';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-
 import { notesManagerModel } from '../application/note/manager/model';
 
 export const QuickStart = observer(() => {

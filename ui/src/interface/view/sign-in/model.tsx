@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-
 import { Tab } from './types';
 
 class SignInViewModel {

@@ -1,8 +1,7 @@
 import type { User } from '@prisma/client';
 import { z } from 'zod';
 import { apiClient } from '~/interface/shared/api-client/mod.api-client';
-
-import { SignUpDto, VerificationDto } from 'core/src/domain/auth/validation';
+import { SignUpDto, VerificationDto } from 'core/src';
 
 export const api = {
   async signUp({ data }: { data: z.infer<typeof SignUpDto> }) {

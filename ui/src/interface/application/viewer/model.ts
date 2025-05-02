@@ -1,15 +1,14 @@
+import { Option } from 'core';
 import { makeAutoObservable } from 'mobx';
-import { type Session } from '~/interface/domain/session';
+import { AUTH_MESSAGES } from '~/domain/auth';
+import { Viewer } from '~/domain/viewer';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
-
-import { AUTH_MESSAGES } from 'core/src/domain/auth/channel-messaging';
-
 import { handleGithubRedirection } from '../auth/oauth/github';
 import { api } from './api';
 
-class SessionModel {
-  session: Session = null;
+class ViewerModel {
+  viewer: Option<Viewer> = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -25,26 +24,26 @@ class SessionModel {
     });
   });
 
-  upsert(payload: Session) {
-    this.session = payload;
+  upsert(payload: Viewer) {
+    this.viewer = payload;
   }
 
   logout() {
-    this.session = null;
+    this.viewer = null;
     navigator.serviceWorker.controller?.postMessage(AUTH_MESSAGES.LOGOUT);
   }
 
   defineSession = createEffect(async () => {
     const query = await api.getSession();
 
-    if (query.data?.user) {
-      this.upsert(query.data.user);
+    if (query.success?.viewer) {
+      this.upsert(query.success.viewer);
     } else {
       notifications.showCloudSyncReminder();
     }
   });
 }
 
-export const sessionModel = new SessionModel();
+export const viewerModel = new ViewerModel();
 
-export type SessionModelInterface = SessionModel;
+export type ViewerModelInterface = ViewerModel;

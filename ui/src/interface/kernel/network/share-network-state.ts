@@ -1,4 +1,4 @@
-import { NETWORK_MESSAGES } from 'core/src/infrastructure/networking/channel-messaging';
+import { NETWORK_MESSAGES } from './messages';
 
 export function shareNetworkState() {
   window.addEventListener('online', () => {

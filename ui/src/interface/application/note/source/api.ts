@@ -1,9 +1,8 @@
+import { Note, NoteId } from '~/domain/note';
 import { apiClient } from '~/interface/shared/api-client/mod.api-client';
 
-import { type Note } from 'core/src/domain/note/types';
-
 export const api = {
-  async getById({ id }: { id: Note['id'] }) {
+  async getById({ id }: { id: NoteId }) {
     return apiClient.query<{ ok: boolean; note: Note }>({
       url: 'note/getById',
       method: 'POST',

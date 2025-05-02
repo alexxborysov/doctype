@@ -2,7 +2,6 @@ import { Tabs } from '@mantine/core';
 import { observer } from 'mobx-react-lite';
 import { Login } from '~/interface/application/auth/login/view';
 import { Registration } from '~/interface/application/auth/registration/view';
-
 import { signInViewModel } from './model';
 import { Tab } from './types';
 
@@ -17,12 +16,12 @@ export const SignIn = observer(() => {
       onChange={handleChangeTab}
       variant="pills"
       classNames={{
-        tabLabel: 'text-md tracking-wide',
-        tab: 'hover:bg-bgPrimary h-9 data-[active]:bg-bgSecondary text-fontSecondary data-[active]:text-accent',
+        tabLabel: 'text-[14.5px]',
+        tab: 'aria-[selected="false"]:hover:bg-background data-[active]:bg-cyan-500/10',
       }}
       className="w-[84%] sm:w-[60%] md:w-[55%] lg:w-[43%] xl:w-[38%] 2xl:w-[31%]"
     >
-      <Tabs.List justify="center" grow className="mb-5 gap-0 bg-bgPrimary">
+      <Tabs.List justify="center" grow className="mb-5 gap-0 bg-background">
         <Tabs.Tab className="w-[50%]" value={'registration' satisfies Tab}>
           Create An Account
         </Tabs.Tab>

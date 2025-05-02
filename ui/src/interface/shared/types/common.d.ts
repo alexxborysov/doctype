@@ -1,3 +1,5 @@
+import { Option } from 'core';
+
 declare type IconName = string;
 
 declare type DateString = string;
@@ -6,7 +8,7 @@ declare type RoutePath = string;
 
 declare type EffectStatus = 'idle' | 'pending' | 'fulfilled' | 'rejected';
 
-declare type ErrorMessage = string | undefined;
+declare type ErrorMessage = Option<string>;
 
 type ApiErrorData = {
   message: ErrorMessage;
@@ -14,6 +16,6 @@ type ApiErrorData = {
 };
 
 declare type ApiClientResponse<R> = {
-  data: R | undefined;
-  error: import('axios').AxiosError<ApiErrorData> | undefined;
+  success: Option<R>;
+  error: Option<import('axios').AxiosError<ApiErrorData>>;
 };

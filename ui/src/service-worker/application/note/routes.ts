@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
+import { LastUpdatedTime, Note } from '~/domain/note';
 import { networkScheduler } from '~/service-worker/infrastructure/network-scheduler/mod.network-scheduler';
 import { router } from '~/service-worker/infrastructure/router/mod.router';
 import {
@@ -7,11 +8,8 @@ import {
   prepareResponse,
 } from '~/service-worker/infrastructure/router/prepare-response';
 import { authService } from '~/service-worker/services/auth.service';
-
-import { type Note } from 'core/src/domain/note/types';
-import { NoteSchema } from 'core/src/domain/note/validation';
-import { generateId } from 'core/src/infrastructure/lib/generate-id';
-
+import { NoteSchema } from 'core/src/dto/note.dto';
+import { generateId } from 'core/src/lib/generate-id';
 import { cloudApi } from './cloud.api';
 
 export function registerNoteRoutes() {
@@ -21,18 +19,18 @@ export function registerNoteRoutes() {
       const body = await ev.request.json();
       const parsedBody = NoteSchema.pick({ name: true, source: true }).parse(body);
 
-      const session = await authService.getSession();
+      const viewer = await authService.getSession();
       const payload = {
         ...parsedBody,
         id: generateId(),
         lastUpdatedTime: dayjs().toString(),
-      };
+      } as Note;
 
-      if (session) {
-        await db.note.add({ ...payload, userId: session.current.id });
+      if (viewer) {
+        await db.note.add({ ...payload, viewerId: viewer.current.id });
         networkScheduler.post({
           req: ev.request,
-          payload: { ...payload, userId: session.current.id },
+          payload: { ...payload, viewerId: viewer.current.id },
         });
       } else {
         await db.note.add(payload);
@@ -67,15 +65,16 @@ export function registerNoteRoutes() {
     path: 'note/rename',
     handler: async (ev, db) => {
       const body = await ev.request.json();
-      const parsedBody = NoteSchema.pick({ name: true, id: true }).parse(body);
+      const parsedBody = NoteSchema.pick({ name: true, id: true }).parse(body) as Pick<
+        Note,
+        'id' | 'name'
+      >;
 
       const session = await authService.getSession();
-      const lastUpdatedTime = dayjs().toString();
 
       const renamed = await db.note
         .update(parsedBody.id, {
           name: parsedBody.name,
-          lastUpdatedTime,
         })
         .catch(() => undefined);
 
@@ -83,8 +82,7 @@ export function registerNoteRoutes() {
         const cloudReqPayload = {
           id: parsedBody.id,
           name: parsedBody.name,
-          lastUpdatedTime,
-        } satisfies Pick<Note, 'id' | 'name' | 'lastUpdatedTime'>;
+        } satisfies Pick<Note, 'id' | 'name'>;
 
         networkScheduler.post({ req: ev.request, payload: cloudReqPayload });
       }
@@ -189,18 +187,24 @@ export function registerNoteRoutes() {
     path: 'note/updateSource',
     handler: async (ev, db) => {
       const body = await ev.request.json();
-      const { id, source } = NoteSchema.pick({ id: true, source: true }).parse(body);
+      const { id, source } = NoteSchema.pick({ id: true, source: true }).parse(body) as Pick<
+        Note,
+        'id' | 'source'
+      >;
 
       const session = await authService.getSession();
+      const now = dayjs().toString() as LastUpdatedTime;
 
-      const lastUpdatedTime = dayjs().toString();
       const update = await db.note.update(id, {
         source,
-        lastUpdatedTime,
+        lastUpdatedTime: now,
       });
 
       if (session?.current) {
-        networkScheduler.post({ req: ev.request, payload: { id, source, lastUpdatedTime } });
+        networkScheduler.post({
+          req: ev.request,
+          payload: { id, source, lastUpdatedTime: now },
+        });
       }
 
       if (update) {

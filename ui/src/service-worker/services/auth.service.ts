@@ -1,12 +1,10 @@
-import { User } from '@prisma/client';
-import { AUTH_MESSAGES } from 'core/src/domain/auth/channel-messaging';
-import { type Tokens } from 'core/src/domain/auth/types';
-
+import { AUTH_MESSAGES, AuthTokens } from '~/domain/auth';
+import { Viewer } from '~/domain/viewer';
 import { LocalDB } from '../infrastructure/db/mod.db';
 import { swMessageChannel } from '../infrastructure/message-channel/mod.message-channel';
 
 export const authService = {
-  async updateTokens({ access, refresh }: Tokens) {
+  async updateTokens({ access, refresh }: AuthTokens) {
     const db = await LocalDB.getConnection();
 
     try {
@@ -24,24 +22,24 @@ export const authService = {
   },
   async getTokens() {
     const db = await LocalDB.getConnection();
-    return await db.authTokens.get('singleton').catch(() => undefined);
+    return await db.authTokens.get('singleton').catch(() => null);
   },
   async removeTokens() {
     const db = await LocalDB.getConnection();
     await db.authTokens.delete('singleton').catch(() => {});
   },
 
-  async updateSession({ user }: { user: User }) {
+  async updateSession({ viewer }: { viewer: Viewer }) {
     const db = await LocalDB.getConnection();
 
     try {
       const singleton = await db.session.get('singleton');
 
       if (!singleton) {
-        await db.session.add({ id: 'singleton', current: user });
+        await db.session.add({ id: 'singleton', current: viewer });
       } else {
         await db.session.update('singleton', {
-          current: user,
+          current: viewer,
         });
       }
 

@@ -1,10 +1,8 @@
-export { type Tokens } from './domain/auth/types';
-export { LoginDto, SignUpDto, VerificationDto } from './domain/auth/validation';
-export { AUTH_MESSAGES } from './domain/auth/channel-messaging';
+export { LoginDto, SignUpDto, VerificationDto } from './dto/auth.dto';
+export { NoteSchema } from './dto/note.dto';
 
-export { type Note } from './domain/note/types';
-export { NoteSchema } from './domain/note/validation';
-export { NOTE_MESSAGES } from './domain/note/channel-messaging';
+export { generateId } from './lib/generate-id';
 
-export { generateId } from './infrastructure/lib/generate-id';
-export { NETWORK_MESSAGES } from './infrastructure/networking/channel-messaging';
+export type { Tag } from './lib/tag';
+export type { Option } from './lib/option';
+export type { Result } from './lib/result';

@@ -1,8 +1,6 @@
-import { generateId } from 'core/src/infrastructure/lib/generate-id';
-import { NETWORK_MESSAGES } from 'core/src/infrastructure/networking/channel-messaging';
-
-import { swApiClient } from '../api-client/mod.api-client';
-import { type AnyPayload } from '../api-client/types';
+import { NETWORK_MESSAGES } from '~/interface/kernel/network/messages';
+import { generateId } from 'core/src/lib/generate-id';
+import { AnyPayload, swApiClient } from '../api-client/mod.api-client';
 import { LocalDB } from '../db/mod.db';
 import { parseRequestInstance } from '../lib/request.parser';
 import { swMessageChannel } from '../message-channel/mod.message-channel';

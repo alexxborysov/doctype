@@ -1,7 +1,5 @@
 import { Button, FocusTrap, Modal } from '@mantine/core';
-
-import { type Note } from 'core/src/domain/note/types';
-
+import { Note } from '~/domain/note';
 import { notesManagerModel } from '../model';
 
 interface Props {

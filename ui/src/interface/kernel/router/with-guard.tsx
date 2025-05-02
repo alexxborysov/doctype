@@ -1,19 +1,20 @@
-import { type Role } from '@prisma/client';
-import { FunctionComponent } from 'react';
+import type { FunctionComponent } from 'react';
 import { Navigate } from 'react-router-dom';
-import { sessionModel } from '~/interface/application/session/model';
+import type { ViewerRole } from '~/domain/viewer';
+import { viewerModel } from '~/interface/application/viewer/model';
+import { RoutePath } from '~/interface/shared/types/common';
 
-const SUPER_ROLES = [] satisfies Role[];
+const SUPER_ROLES = [] satisfies ViewerRole[];
 
 export function withGuard(
   Component: FunctionComponent,
-  permissibleRoles: ExcludeStrict<Role, (typeof SUPER_ROLES)[number]>[],
+  permissibleRoles: ExcludeStrict<ViewerRole, (typeof SUPER_ROLES)[number]>[],
   redirectTo?: RoutePath
 ) {
   return function RouteElement(props: Record<string, unknown>) {
-    const session = sessionModel.session;
+    const viewer = viewerModel.viewer;
 
-    if (!session?.role || !isAccessGranted(session.role, permissibleRoles)) {
+    if (!viewer?.role || !isAccessGranted(viewer.role, permissibleRoles)) {
       return <Navigate to={redirectTo || '/access-denied'} replace />;
     }
 
@@ -22,9 +23,9 @@ export function withGuard(
 }
 
 function isAccessGranted(
-  sessionRole: Role,
-  permissibleRoles: ExcludeStrict<Role, (typeof SUPER_ROLES)[number]>[]
+  viewerRole: ViewerRole,
+  permissibleRoles: ExcludeStrict<ViewerRole, (typeof SUPER_ROLES)[number]>[]
 ) {
   const allPermissibleRoles = [...SUPER_ROLES, ...permissibleRoles];
-  return allPermissibleRoles.some((role) => role === sessionRole);
+  return allPermissibleRoles.some((role) => role === viewerRole);
 }

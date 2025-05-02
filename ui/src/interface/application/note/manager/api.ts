@@ -1,9 +1,8 @@
+import { Note } from '~/domain/note';
 import { apiClient } from '~/interface/shared/api-client/mod.api-client';
 
-import { type Note } from 'core/src/domain/note/types';
-
 export const api = {
-  async create({ data }: { data: OmitStrict<Note, 'lastUpdatedTime' | 'id'> }) {
+  async create({ data }: { data: OmitStrict<Note, 'lastUpdatedTime' | 'id' | 'viewerId'> }) {
     return apiClient.query<{ ok: boolean }>({
       url: 'note/create',
       method: 'POST',

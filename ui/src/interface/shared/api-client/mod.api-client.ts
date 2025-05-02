@@ -1,5 +1,6 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 import { serviceWorkerState } from '~/interface/kernel/network/sw-state';
+import { ApiClientResponse, ApiErrorData } from '../types/common';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
@@ -9,21 +10,21 @@ const instance = axios.create({
 export const apiClient = {
   async query<R>(config: AxiosRequestConfig) {
     let _res: ApiClientResponse<R> = {
-      data: undefined,
-      error: undefined,
+      success: null,
+      error: null,
     };
 
     async function executeQuery() {
       await instance
         .request<R>(config)
         .then((res: any) => {
-          _res = { error: undefined, data: res.data };
+          _res = { error: null, success: res.data };
         })
         .catch((err: AxiosError<ApiErrorData, any>) => {
           const code = err?.response?.data?.statusCode ?? 304;
           const _err = code >= 200 && code < 500 ? err : UNEXPECTED_ERROR;
 
-          _res = { data: undefined, error: _err };
+          _res = { success: null, error: _err };
         });
     }
 
@@ -31,7 +32,7 @@ export const apiClient = {
     await executeQuery().catch(() => {});
 
     return {
-      data: _res.data,
+      success: _res.success,
       error: _res.error,
     };
   },

@@ -9,5 +9,6 @@
     "ui",
     "backend",
     "db"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22"
 }

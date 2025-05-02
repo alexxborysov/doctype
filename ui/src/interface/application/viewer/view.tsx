@@ -4,15 +4,14 @@ import { m } from 'framer-motion';
 import { observer } from 'mobx-react-lite';
 import { useNetworkState } from '~/interface/kernel/network/use-network-state';
 import { NavigationButton } from '~/interface/shared/view/buttons/navigation';
-
-import { sessionModel } from './model';
+import { viewerModel } from './model';
 
 export const SessionAction = observer(() => {
   const network = useNetworkState();
-  const session = sessionModel.session;
+  const session = viewerModel.viewer;
 
   const logout = () => {
-    sessionModel.logout();
+    viewerModel.logout();
   };
 
   if (!session && network.online) {

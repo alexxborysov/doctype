@@ -1,7 +1,6 @@
 import { Divider, Kbd, Paper, Portal } from '@mantine/core';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
-
 import { Search } from '../../search/view';
 import { notesManagerModel } from '../model';
 
@@ -31,12 +30,11 @@ export const Toolbar = observer(() => {
 
         <Divider orientation="vertical" className="h-4 my-auto" />
 
-        <Kbd className="h-7 w-7">
-          <p className="-mt-[5px] text-[18px]">⌥</p>
-        </Kbd>
-        <span className="text-gray-400">+</span>
-        <Kbd className="h-7 w-7 text-center font-['JetBrainsMono']">
-          <p className="text-[14px] -mt-[1px]">N</p>
+        <Kbd className="h-[30px]">
+          <div className="-mt-1 flex items-center space-x-1">
+            <p className="text-[18px]">⌥</p>
+            <p className="text-[14px]">N</p>
+          </div>
         </Kbd>
       </Paper>
     </Portal>

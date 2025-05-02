@@ -1,19 +1,18 @@
+import { Option } from 'core';
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
+import { NoteId, NoteSource } from '~/domain/note';
 import { router } from '~/interface/kernel/router/mod.router';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
-
-import { type Note, type Source } from 'core/src/domain/note/types';
-
 import { NoteManagerModelInterface } from '../manager/model';
 import { api } from './api';
 
 export class NoteSourceModel {
-  source: Source | null = null;
-  id: Note['id'];
+  id: NoteId;
+  source: Option<NoteSource> = null;
 
   constructor(
-    config: { id: Note['id'] },
+    config: { id: NoteId },
     private noteManagerModel: NoteManagerModelInterface
   ) {
     makeAutoObservable(this);
@@ -27,7 +26,7 @@ export class NoteSourceModel {
     this.noteManagerModel.pullCloud.run();
 
     const pullQuery = await api.getById({ id: this.id });
-    const source = pullQuery.data?.note.source;
+    const source = pullQuery.success?.note.source;
 
     if (source) {
       runInAction(() => {
@@ -53,8 +52,8 @@ export class NoteSourceModel {
     );
   });
 
-  updateSource = createEffect(async (payload: Source) => {
+  updateSource = createEffect(async (payload: NoteSource) => {
     const query = await api.updateSource({ id: this.id, source: payload });
-    return query.data?.ok;
+    return query.success?.ok;
   });
 }

@@ -1,18 +1,17 @@
+import { Option } from 'core';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { Note, NoteId, NoteName } from '~/domain/note';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
-
-import { type Note } from 'core/src/domain/note/types';
-
 import { notesManagerModel, NoteManagerModelInterface } from '../manager/model';
 import { api } from './api';
 
 export class NoteRenameModel {
-  process?: {
-    id: Note['id'];
-    input: Note['name'];
-    initial: Note['name'];
-  };
+  process: Option<{
+    id: NoteId;
+    input: NoteName;
+    initial: NoteName;
+  }> = null;
 
   constructor(private noteManagerModel: NoteManagerModelInterface) {
     makeAutoObservable(this);
@@ -27,11 +26,11 @@ export class NoteRenameModel {
   }
 
   update(payload: Pick<Note, 'name'>) {
-    const current = this.process;
-    if (current) {
+    const currentProcess = this.process;
+    if (currentProcess) {
       runInAction(() => {
         this.process = {
-          ...current,
+          ...currentProcess,
           input: payload.name,
         };
       });
@@ -39,15 +38,21 @@ export class NoteRenameModel {
   }
 
   apply = createEffect(async () => {
-    if (this.process && this.process?.initial !== this.process?.input) {
+    const isDirty = this.process?.initial !== this.process?.input;
+    const canApply = this.process && isDirty;
+
+    if (canApply) {
+      const preparedName = this.process!.input?.length
+        ? (this.process!.input.trim() as NoteName)
+        : (this.process!.initial as NoteName);
       const renameQuery = await api.rename({
         data: {
-          id: this.process.id,
-          name: this.process.input.length ? this.process.input.trim() : this.process.initial,
+          id: this.process!.id,
+          name: preparedName,
         },
       });
 
-      if (renameQuery.data?.ok) {
+      if (renameQuery.success?.ok) {
         await this.noteManagerModel.pull.run();
       } else {
         notifications.noteNotRenamed();
@@ -55,7 +60,7 @@ export class NoteRenameModel {
     }
 
     runInAction(() => {
-      this.process = undefined;
+      this.process = null;
     });
   });
 }

@@ -25,7 +25,7 @@ export function EditorToolbar({ editor }: { editor: Editor | null }) {
         <Kbd className="h-7">
           <p className="-mt-[5px] text-[18px]">⌥</p>
         </Kbd>
-        <Divider variant="solid" orientation="vertical" className="h-[22px] m-auto" />
+        <Divider variant="solid" orientation="vertical" className="h-[16px] m-auto" />
         <Button
           action={() => editor.chain().focus().setHeading({ level: 3 }).run()}
           isActive={editor.isActive('heading', { level: 3 })}
@@ -76,7 +76,7 @@ function Button({
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
-      const triggered = event.altKey && event.code === shortcutKey;
+      const triggered = (event.altKey || event.ctrlKey) && event.code === shortcutKey;
       if (triggered) {
         event.preventDefault();
         action();
@@ -91,7 +91,9 @@ function Button({
 
   return (
     <button onClick={action} className="relative w-5 h-5">
-      <IconSlot className={twMerge('w-[18px] h-[18px]', isActive && 'text-accent')} />
+      <IconSlot
+        className={twMerge('w-[18px] h-[18px] text-zinc-300', isActive && 'text-cyan-400')}
+      />
       <span className="absolute -bottom-[4px] -right-[5px] text-[9px] text-gray-500">
         {numberLabel}
       </span>

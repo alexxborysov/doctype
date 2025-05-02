@@ -1,6 +1,5 @@
 import { type AxiosHeaders } from 'axios';
-
-import { type AnyPayload } from '../api-client/types';
+import { AnyPayload } from '../api-client/mod.api-client';
 
 export function parseRequestInstance(req: Request, payload?: AnyPayload) {
   const headers = Object.fromEntries(req.headers.entries());

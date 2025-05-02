@@ -1,0 +1,4 @@
+export const NETWORK_MESSAGES = {
+  ONLINE: 'NETWORK_ONLINE',
+  OFFLINE: 'NETWORK_OFFLINE',
+} as const;

@@ -1,8 +1,7 @@
 import { z } from 'zod';
+import { Note } from '~/domain/note';
 import { swApiClient } from '~/service-worker/infrastructure/api-client/mod.api-client';
-
-import { type Note } from 'core/src/domain/note/types';
-import { NoteStrictSchema } from 'core/src/domain/note/validation';
+import { NoteStrictSchema } from 'core/src/dto/note.dto';
 
 export const cloudApi = {
   async getRemotelyStored() {
