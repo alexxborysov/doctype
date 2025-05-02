@@ -26,7 +26,7 @@ export function registerNoteRoutes() {
         lastUpdatedTime: dayjs().toString(),
       } as Note;
 
-      if (viewer) {
+      if (viewer?.current) {
         await db.note.add({ ...payload, viewerId: viewer.current.id });
         networkScheduler.post({
           req: ev.request,

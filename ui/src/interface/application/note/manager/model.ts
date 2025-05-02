@@ -5,6 +5,7 @@ import { Note, NOTE_MESSAGES, NoteId, NoteName, NoteSource } from '~/domain/note
 import { serviceWorkerState } from '~/interface/kernel/network/sw-state';
 import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
+import { messageChannel } from '~/interface/shared/message-channel/mod.message-channel';
 import { DEVELOPMENT_TEMPLATE } from '~/interface/view/editor/templates/development.template';
 import { DEVOPS_DEPLOY_TEMPLATE } from '~/interface/view/editor/templates/devops.template';
 import { getDefaultNoteTemplate } from '~/interface/view/editor/templates/note.template';
@@ -101,12 +102,8 @@ class NotesManagerModel {
   });
 }
 
-export const notesManagerModel = new NotesManagerModel(viewerModel);
-
-navigator.serviceWorker.addEventListener('message', ({ data: key }) => {
-  if (key === NOTE_MESSAGES.SAVED_TO_CLOUD) {
-    notifications.progressSavedToCloud();
-  }
+messageChannel.on(NOTE_MESSAGES.SAVED_TO_CLOUD, () => {
+  notifications.progressSavedToCloud();
 });
 
 export const lastOpened = {
@@ -121,6 +118,8 @@ export const lastOpened = {
 export function generateNoteName() {
   return ('Note: ' + '~' + dayjs().format('ss').toString()) as NoteName;
 }
+
+export const notesManagerModel = new NotesManagerModel(viewerModel);
 
 export const SAMPLE_TEMPLATES = {
   Development: {

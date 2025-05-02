@@ -4,6 +4,7 @@ import { AUTH_MESSAGES } from '~/domain/auth';
 import { Viewer } from '~/domain/viewer';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
+import { messageChannel } from '~/interface/shared/message-channel/mod.message-channel';
 import { handleGithubRedirection } from '../auth/oauth/github';
 import { api } from './api';
 
@@ -30,7 +31,7 @@ class ViewerModel {
 
   logout() {
     this.viewer = null;
-    navigator.serviceWorker.controller?.postMessage(AUTH_MESSAGES.LOGOUT);
+    messageChannel.post(AUTH_MESSAGES.LOGOUT);
   }
 
   defineSession = createEffect(async () => {
