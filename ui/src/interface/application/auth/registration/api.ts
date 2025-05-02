@@ -1,11 +1,11 @@
-import type { User } from '@prisma/client';
 import { z } from 'zod';
+import { Viewer } from '~/domain/viewer';
 import { apiClient } from '~/interface/shared/api-client/mod.api-client';
 import { SignUpDto, VerificationDto } from 'core/src';
 
 export const api = {
   async signUp({ data }: { data: z.infer<typeof SignUpDto> }) {
-    return apiClient.query<{ createdUser: User }>({
+    return apiClient.query<{ createdUser: Viewer }>({
       url: 'auth/sign-up',
       method: 'POST',
       data,

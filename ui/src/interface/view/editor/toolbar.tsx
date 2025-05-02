@@ -20,7 +20,7 @@ export function EditorToolbar({ editor }: { editor: Editor | null }) {
     <Portal>
       <Paper
         shadow="sm"
-        className="px-3 py-2 fixed bottom-1/2 right-6 transform translate-y-1/2 space-y-2 flex  flex-col items-center justify-center z-50 overflow-hidden"
+        className="px-3 py-2 fixed bottom-1/2 right-5 transform translate-y-1/2 space-y-2 flex  flex-col items-center justify-center z-50 overflow-hidden"
       >
         <Button
           action={() => editor.chain().focus().setHeading({ level: 3 }).run()}

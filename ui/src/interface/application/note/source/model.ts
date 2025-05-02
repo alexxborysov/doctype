@@ -12,18 +12,18 @@ export class NoteSourceModel {
   source: Option<NoteSource> = null;
 
   constructor(
-    config: { id: NoteId },
-    private noteManagerModel: NoteManagerModelInterface
+    options: { id: NoteId },
+    private notesManagerModel: NoteManagerModelInterface
   ) {
     makeAutoObservable(this);
 
-    this.id = config.id;
+    this.id = options.id;
     this.init.run();
   }
 
   init = createEffect(async () => {
-    await this.noteManagerModel.init.meta.promise;
-    this.noteManagerModel.pullCloud.run();
+    await this.notesManagerModel.init.meta.promise;
+    this.notesManagerModel.pullCloud.run();
 
     const pullQuery = await api.getById({ id: this.id });
     const source = pullQuery.success?.note.source;
@@ -33,17 +33,17 @@ export class NoteSourceModel {
         this.source = source;
       });
 
-      this.noteManagerModel.setLastOpenedNote(this.id);
+      this.notesManagerModel.setLastOpenedNote(this.id);
     } else {
       router.navigate('/');
       notifications.noteNotFound();
     }
 
     reaction(
-      () => this.noteManagerModel.pool,
+      () => this.notesManagerModel.pool,
       () => {
         runInAction(() => {
-          const pulled = this.noteManagerModel.pool.find((note) => note.id === this.id);
+          const pulled = this.notesManagerModel.pool.find((note) => note.id === this.id);
           if (pulled) {
             this.source = pulled.source;
           }

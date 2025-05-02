@@ -13,7 +13,8 @@ const EditorView = lazy(async () =>
 );
 
 export const Editor = () => {
-  const { noteId } = useParams();
+  const searchParams = useParams();
+  const noteId = searchParams?.noteId as NoteId;
 
   if (!noteId?.length) {
     router.navigate('/');
@@ -30,10 +31,8 @@ export const Editor = () => {
       }}
       className="flex w-full px-[1%] lg:px-[2%] items-start justify-center relative min-h-[95vh]"
     >
-      <Suspense fallback={<BaseLoader position="centered" className="-mt-[3vh]" />}>
-        <EditorView
-          noteSourceModel={new NoteSourceModel({ id: noteId as NoteId }, notesManagerModel)}
-        />
+      <Suspense fallback={<BaseLoader position="centered" />}>
+        <EditorView noteSourceModel={new NoteSourceModel({ id: noteId }, notesManagerModel)} />
       </Suspense>
     </m.main>
   );

@@ -1,7 +1,7 @@
-import type { User } from '@prisma/client';
-import { SignUpDto } from 'core';
+import { Option, SignUpDto } from 'core';
 import { makeAutoObservable } from 'mobx';
 import { z } from 'zod';
+import { ViewerEmail } from '~/domain/viewer';
 import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
 import { signInViewModel, SignInViewModelInterface } from '~/interface/view/sign-in/model';
@@ -9,9 +9,14 @@ import { api } from './api';
 import { Step } from './types';
 import { VerificationSchema } from './validation';
 
+type Credentials = {
+  email: ViewerEmail;
+  password?: Option<string>;
+};
+
 class RegistrationModel {
   step: Step = 'receiving-credentials';
-  credentials?: Partial<User>;
+  credentialsInProcess: Option<Credentials> = null;
 
   constructor(private signInViewModel: SignInViewModelInterface) {
     makeAutoObservable(this);
@@ -21,20 +26,21 @@ class RegistrationModel {
     this.step = payload;
   }
 
-  upsertCredentials(payload: Partial<User>) {
-    this.credentials = payload;
+  upsertCredentials(credentials: Credentials) {
+    this.credentialsInProcess = credentials;
   }
 
   reset() {
     this.step = 'receiving-credentials';
-    this.credentials = undefined;
+    this.credentialsInProcess = null;
   }
 
   signUp = createEffect(async (creds: z.infer<typeof SignUpDto>) => {
     const query = await api.signUp({ data: creds });
 
-    if (query?.success) {
-      this.upsertCredentials(query.success.createdUser);
+    if (query?.success?.createdUser) {
+      const createdUser = query.success.createdUser;
+      this.upsertCredentials({ email: createdUser.email });
       this.changeStep('verification');
     } else {
       throw new EffectError(query.error?.response?.data.message);
@@ -43,7 +49,7 @@ class RegistrationModel {
 
   verify = createEffect(async (payload: z.infer<typeof VerificationSchema>) => {
     const query = await api.verify({
-      data: { code: payload.code, email: this.credentials?.email ?? '' },
+      data: { code: payload.code, email: this.credentialsInProcess?.email ?? '' },
     });
 
     if (query.success) {

@@ -24,7 +24,7 @@ export const Toolbar = observer(() => {
     <Portal>
       <Paper
         shadow="sm"
-        className="px-3 py-2 fixed bottom-8 left-[50%] transform -translate-x-[50%] space-x-3 flex items-center justify-center z-50 overflow-hidden"
+        className="px-3 py-2 fixed bottom-5 left-[50%] transform -translate-x-[50%] space-x-3 flex items-center justify-center z-50 overflow-hidden"
       >
         <Search />
 

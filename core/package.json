@@ -8,17 +8,17 @@
         "build": "rm -fr ./dist-cjs & npx tsc"
     },
     "dependencies": {
-        "uuid": "^9.0.1",
-        "zod": "3.14.3"
+        "uuid": "11.1.0",
+        "zod": "3.24.3"
     },
     "devDependencies": {
-        "@rollup/plugin-babel": "^6.0.4",
-        "@rollup/plugin-terser": "^0.4.4",
-        "@rollup/plugin-typescript": "^11.1.6",
-        "@types/uuid": "^9.0.8",
-        "rollup-plugin-cleaner": "^1.0.0",
-        "rollup-plugin-dts": "^6.1.0",
-        "rollup-plugin-size": "^0.3.1",
-        "typescript": "^5.2.2"
+        "@rollup/plugin-babel": "6.0.4",
+        "@rollup/plugin-terser": "0.4.4",
+        "@rollup/plugin-typescript": "12.1.2",
+        "@types/uuid": "10.0.0",
+        "rollup-plugin-cleaner": "1.0.0",
+        "rollup-plugin-dts": "6.1.0",
+        "rollup-plugin-size": "0.3.1",
+        "typescript": "5.2.2"
     }
 }

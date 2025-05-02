@@ -16,8 +16,8 @@ export const Registration = observer(() => {
 
 const SignUpForm = observer(() => {
   const handleSubmit = async (credentials: z.infer<typeof SignUpSchema>) => {
-    Reflect.deleteProperty(credentials, 'confirm');
-    registrationModel.signUp.run(credentials);
+    const { email, password } = credentials;
+    registrationModel.signUp.run({ email, password });
   };
 
   return (
