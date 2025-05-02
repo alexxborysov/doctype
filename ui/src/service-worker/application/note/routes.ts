@@ -48,10 +48,10 @@ export function registerNoteRoutes() {
       const body = await ev.request.json();
       const parsedBody = NoteSchema.pick({ id: true }).parse(body);
 
-      const session = await authService.getSession();
+      const viewer = await authService.getSession();
       await db.note.delete(parsedBody.id);
 
-      if (session?.current.id) {
+      if (viewer?.current?.id) {
         networkScheduler.post({ req: ev.request, payload: parsedBody });
       }
 
@@ -70,7 +70,7 @@ export function registerNoteRoutes() {
         'id' | 'name'
       >;
 
-      const session = await authService.getSession();
+      const viewer = await authService.getSession();
 
       const renamed = await db.note
         .update(parsedBody.id, {
@@ -78,7 +78,7 @@ export function registerNoteRoutes() {
         })
         .catch(() => undefined);
 
-      if (session?.current) {
+      if (viewer?.current?.id) {
         const cloudReqPayload = {
           id: parsedBody.id,
           name: parsedBody.name,
@@ -124,10 +124,10 @@ export function registerNoteRoutes() {
 
       const query = await cloudApi.getRemotelyStored();
 
-      if (query.data?.ok) {
+      if (query.success?.ok) {
         let updated = false;
         const local = await db.note.toArray();
-        const receivedRemotely = query.data.items;
+        const receivedRemotely = query.success.items;
 
         receivedRemotely.forEach(async (remoteNote) => {
           const localNote = local.find((localNote) => localNote.id === remoteNote.id);
@@ -192,22 +192,22 @@ export function registerNoteRoutes() {
         'id' | 'source'
       >;
 
-      const session = await authService.getSession();
+      const viewer = await authService.getSession();
       const now = dayjs().toString() as LastUpdatedTime;
 
-      const update = await db.note.update(id, {
+      const updated = await db.note.update(id, {
         source,
         lastUpdatedTime: now,
       });
 
-      if (session?.current) {
+      if (viewer?.current) {
         networkScheduler.post({
           req: ev.request,
           payload: { id, source, lastUpdatedTime: now },
         });
       }
 
-      if (update) {
+      if (updated) {
         return prepareResponse({
           ok: true,
         });

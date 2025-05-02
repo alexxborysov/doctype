@@ -20,14 +20,14 @@ async function loginHandler(ev: FetchEvent) {
     parsedRequest: parseRequestInstance(clonedReq, payload),
   });
 
-  if (query.data) {
-    await authService.updateTokens(query.data.tokens);
-    await authService.updateSession({ viewer: query.data.viewer });
+  if (query.success) {
+    await authService.updateTokens(query.success.tokens);
+    await authService.updateSession({ viewer: query.success.viewer });
 
     await networkScheduler.execute();
     claimNotesToSession();
 
-    return prepareResponse(query.data);
+    return prepareResponse(query.success);
   } else {
     return prepareErrorResponse(query.error);
   }
@@ -56,11 +56,11 @@ export function registerAuthRoutes() {
         parsedRequest: parseRequestInstance(ev.request),
       });
 
-      if (query.data) {
-        await authService.updateSession({ viewer: query.data.viewer });
+      if (query.success) {
+        await authService.updateSession({ viewer: query.success.viewer });
         await claimNotesToSession();
 
-        return prepareResponse(query.data);
+        return prepareResponse(query.success);
       } else {
         return prepareErrorResponse(query.error);
       }
@@ -75,8 +75,8 @@ export function registerAuthRoutes() {
         parsedRequest: parseRequestInstance(clonedReq),
       });
 
-      if (query.data) {
-        const tokens = query.data.tokens;
+      if (query.success) {
+        const tokens = query.success.tokens;
         await authService.updateTokens(tokens);
 
         return prepareResponse({ ok: true });

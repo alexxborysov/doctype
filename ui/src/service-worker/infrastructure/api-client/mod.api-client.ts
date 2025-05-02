@@ -89,7 +89,7 @@ export const swApiClient = {
     }
 
     return {
-      data: _res?.success,
+      success: _res?.success,
       error: _res?.error,
     };
   },

@@ -20,12 +20,8 @@ export function EditorToolbar({ editor }: { editor: Editor | null }) {
     <Portal>
       <Paper
         shadow="sm"
-        className="px-3 py-2 fixed bottom-8 left-[50%] transform -translate-x-[50%] space-x-4 flex items-center justify-center z-50 overflow-hidden"
+        className="px-3 py-2 fixed bottom-1/2 right-6 transform translate-y-1/2 space-y-2 flex  flex-col items-center justify-center z-50 overflow-hidden"
       >
-        <Kbd className="h-7">
-          <p className="-mt-[5px] text-[18px]">⌥</p>
-        </Kbd>
-        <Divider variant="solid" orientation="vertical" className="h-[16px] m-auto" />
         <Button
           action={() => editor.chain().focus().setHeading({ level: 3 }).run()}
           isActive={editor.isActive('heading', { level: 3 })}
@@ -56,6 +52,10 @@ export function EditorToolbar({ editor }: { editor: Editor | null }) {
           IconSlot={ListBulletIcon}
           shortcutKey="Digit5"
         />
+        <Divider variant="solid" orientation="horizontal" className="h-1 w-4 my-2" />
+        <Kbd className="h-7">
+          <p className="-mt-[5px] text-[18px]">⌥</p>
+        </Kbd>
       </Paper>
     </Portal>
   );

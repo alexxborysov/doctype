@@ -1,9 +1,9 @@
-import { Option } from 'core';
+import type { Option } from 'core';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Note, NoteId, NoteName } from '~/domain/note';
+import type { Note, NoteId, NoteName } from '~/domain/note';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
-import { notesManagerModel, NoteManagerModelInterface } from '../manager/model';
+import { notesManagerModel, type NoteManagerModelInterface } from '../manager/model';
 import { api } from './api';
 
 export class NoteRenameModel {

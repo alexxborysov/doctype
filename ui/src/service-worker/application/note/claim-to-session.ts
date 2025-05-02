@@ -23,7 +23,7 @@ export async function claimNotesToSession() {
           },
         });
 
-        if (created.data?.ok) {
+        if (created.success?.ok) {
           db.note.update(doc.id, {
             viewerId: session.current.id,
           });

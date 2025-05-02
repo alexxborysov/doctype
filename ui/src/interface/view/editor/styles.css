@@ -151,6 +151,15 @@
       text-underline-offset: 3px;
     }
   }
+
+  hr {
+    border: 0;
+    border-bottom: 1px dashed oklch(0.442 0.017 285.786);
+    margin: 1.5rem 0;
+    opacity: 0.6;
+    width: 96%;
+    margin: 25px auto;
+  }
 }
 
 .ProseMirror {
