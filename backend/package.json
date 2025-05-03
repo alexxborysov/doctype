@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "build": "rm -fr ./dist && nest build",
+    "build": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "nest start",
+    "start": "npx nest start",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node ./dist/src/main",
@@ -37,10 +37,10 @@
     "nodemailer": "6.9.8",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1",
-    "zod": "3.24.3"
+    "zod": "3.24.3",
+    "@nestjs/cli": "11.0.7"
   },
   "devDependencies": {
-    "@nestjs/cli": "11.0.7",
     "@nestjs/schematics": "11.0.5",
     "@nestjs/testing": "11.1.0",
     "@swc/cli": "0.7.3",

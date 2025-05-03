@@ -1,0 +1,5 @@
+/assets/sw.js
+  Service-Worker-Allowed: /
+
+/sw.js
+  Service-Worker-Allowed: /

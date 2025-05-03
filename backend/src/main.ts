@@ -9,8 +9,11 @@ import { PrismaClientExceptionFilter } from './kernel/filters/prisma-exceptions.
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const allowedOrigins = [process.env.FRONTEND_APP_URL];
+  console.log('Allow Origins: ', allowedOrigins);
+
   app.enableCors({
-    origin: [process.env.FRONTEND_APP_URL ?? ''],
+    origin: allowedOrigins,
     credentials: true,
   });
   app.use(helmet());
@@ -21,6 +24,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  await app.listen(3001);
+  await app.listen(process.env.BACKEND_PORT || 3001);
 }
+
 bootstrap();

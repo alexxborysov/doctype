@@ -1,6 +1,7 @@
 import { HttpStatusCode } from 'axios';
 import { makeAutoObservable } from 'mobx';
 import { z } from 'zod';
+import { ViewerEmail } from '~/domain/viewer';
 import { router } from '~/interface/kernel/router/mod.router';
 import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
@@ -36,7 +37,7 @@ class LoginModel {
     if (isVerificationNeeded) {
       notifications.notVerifiedAccount();
 
-      this.registrationModel.upsertCredentials({ email: creds.email });
+      this.registrationModel.upsertCredentials({ email: creds.email as ViewerEmail });
       this.registrationModel.changeStep('verification');
       this.signInViewModel.changeTab('registration');
     }
