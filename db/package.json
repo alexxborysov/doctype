@@ -2,6 +2,9 @@
   "name": "db",
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "gen:types": "npx prisma generate"
+  },
   "prisma": {
     "schema": "./src/schema.prisma"
   },
