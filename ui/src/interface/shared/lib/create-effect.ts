@@ -65,6 +65,7 @@ export function createEffect<
 
           if (error instanceof EffectError) {
             errorOutput = { payload: error.payload as Error };
+            console.log(errorOutput);
           } else if (error instanceof EffectCanceledError) {
             errorOutput = { canceled: EFFECT_CANCELED };
           } else {

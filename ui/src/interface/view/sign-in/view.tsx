@@ -19,13 +19,20 @@ export const SignIn = observer(() => {
         tabLabel: 'text-[14.5px]',
         tab: 'aria-[selected="false"]:hover:bg-background data-[active]:bg-cyan-500/10',
       }}
+      orientation="horizontal"
       className="w-[84%] sm:w-[60%] md:w-[55%] lg:w-[43%] xl:w-[38%] 2xl:w-[31%]"
     >
-      <Tabs.List justify="center" grow className="mb-5 gap-0 bg-background">
-        <Tabs.Tab className="w-[50%]" value={'registration' satisfies Tab}>
+      <Tabs.List grow className="mb-5 space-x-2 bg-background">
+        <Tabs.Tab
+          className="max-w-[49%] aria-[selected='false']:bg-cyan-500/10 aria-[selected='false']:active:bg-cyan-500/10 aria-[selected='false']:hover:bg-cyan-500/10 data-[active]:bg-cyan-700"
+          value={'registration' satisfies Tab}
+        >
           Create An Account
         </Tabs.Tab>
-        <Tabs.Tab className="w-[50%]" value={'log-in' satisfies Tab}>
+        <Tabs.Tab
+          className="max-w-[49%] aria-[selected='false']:bg-cyan-500/10 aria-[selected='false']:active:bg-cyan-500/10 aria-[selected='false']:hover:bg-cyan-500/10 data-[active]:bg-cyan-700"
+          value={'log-in' satisfies Tab}
+        >
           Log In
         </Tabs.Tab>
       </Tabs.List>

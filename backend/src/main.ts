@@ -10,13 +10,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const allowedOrigins = [process.env.FRONTEND_APP_URL];
-  console.log('Allow Origins: ', allowedOrigins);
-
   app.enableCors({
     origin: allowedOrigins,
     credentials: true,
   });
   app.use(helmet());
+  console.log('Allowed Origins: ', allowedOrigins);
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());

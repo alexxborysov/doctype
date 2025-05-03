@@ -5,6 +5,7 @@ import { ViewerEmail } from '~/domain/viewer';
 import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
 import { signInViewModel, SignInViewModelInterface } from '~/interface/view/sign-in/model';
+import { UNEXPECTED_ERROR_MESSAGE } from '~/service-worker/infrastructure/lib/error-message';
 import { api } from './api';
 import { Step } from './types';
 import { VerificationSchema } from './validation';
@@ -43,7 +44,9 @@ class RegistrationModel {
       this.upsertCredentials({ email: createdUser.email });
       this.changeStep('verification');
     } else {
-      throw new EffectError(query.error?.response?.data.message);
+      throw new EffectError({
+        message: query.error?.response?.data.message || UNEXPECTED_ERROR_MESSAGE,
+      });
     }
   });
 
@@ -58,7 +61,9 @@ class RegistrationModel {
       this.signInViewModel.changeTab('log-in');
       this.changeStep('receiving-credentials');
     } else {
-      throw new EffectError(query.error?.response?.data.message);
+      throw new EffectError({
+        message: query.error?.response?.data.message || UNEXPECTED_ERROR_MESSAGE,
+      });
     }
   });
 }

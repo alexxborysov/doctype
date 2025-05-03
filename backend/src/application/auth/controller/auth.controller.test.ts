@@ -101,7 +101,7 @@ describe('auth-controller', () => {
           authorization: `Bearer ${login_res.tokens.access}`,
         },
       } as any);
-      expect(session.user).toBeDefined();
+      expect(session.viewer).toBeDefined();
     }
   });
 });

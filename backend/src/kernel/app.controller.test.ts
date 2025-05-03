@@ -14,7 +14,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('bootstrap', () => {
-      expect(appController.getHello()).toBe('hello api');
+      expect(appController.healtCheck()).toBe('ok');
     });
   });
 });

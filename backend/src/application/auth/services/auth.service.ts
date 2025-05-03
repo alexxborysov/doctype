@@ -63,53 +63,46 @@ export class AuthService {
     }
 
     const tokens = await this.generateTokens({ user });
-
-    Reflect.deleteProperty(user, 'password');
+    const { password: _, ...viewer } = user;
 
     return {
       tokens,
-      user,
+      viewer,
     };
   }
 
   private async upsertUser(email: string) {
-    const localUser = await this.userRepository
+    const existedUser = await this.userRepository
       .findByEmail({
         email,
       })
       .catch(null);
 
-    const res = {} as {
-      tokens: Awaited<
-        ReturnType<(typeof AuthService)['prototype']['generateTokens']>
-      >;
-      user: OmitStrict<User, 'password'>;
-    };
-
-    if (!localUser) {
+    if (!existedUser) {
       const createdUser = await this.userRepository.create({
         email,
         password: await this.hashService.hash(generateRandomPassword(16)),
       });
-
-      res.user = createdUser;
-      res.tokens = await this.generateTokens({
+      const tokens = await this.generateTokens({
         user: createdUser,
       });
+      const { password, ...viewer } = createdUser;
+      if (!viewer.verified) {
+        this.userRepository.verify({ userId: viewer.id });
+      }
+
+      return { viewer, tokens };
     } else {
-      res.user = localUser;
-      res.tokens = await this.generateTokens({
-        user: localUser,
+      const tokens = await this.generateTokens({
+        user: existedUser,
       });
+      const { password, ...viewer } = existedUser;
+      if (!viewer.verified) {
+        this.userRepository.verify({ userId: viewer.id });
+      }
+
+      return { viewer, tokens };
     }
-
-    if (!res.user.verified) {
-      await this.userRepository.verify({ userId: res.user.id });
-    }
-
-    Reflect.deleteProperty(res.user, 'password');
-
-    return res;
   }
 
   async googleLogin(token: string) {
@@ -213,7 +206,7 @@ export class AuthService {
     }
 
     return {
-      user: sessionUser,
+      viewer: sessionUser,
     };
   }
 
