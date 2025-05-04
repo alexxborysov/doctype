@@ -34,6 +34,8 @@ export class NoteController {
     const created = await this.db.note.create({
       data: body,
     });
+    console.log('Note created:', created);
+
     return {
       ok: true,
       message: 'Note successfully created',
@@ -66,16 +68,12 @@ export class NoteController {
       NoteStrictSchema.pick({
         id: true,
         name: true,
-        lastUpdatedTime: true,
       })
     )
   )
   async rename(
     @Body()
-    body: Pick<
-      z.infer<typeof NoteStrictSchema>,
-      'id' | 'name' | 'lastUpdatedTime'
-    >,
+    body: Pick<z.infer<typeof NoteStrictSchema>, 'id' | 'name'>,
     @Req() req: Request
   ) {
     const reqSession = await this.authService.extractReqSession(req);
@@ -87,7 +85,6 @@ export class NoteController {
         },
         data: {
           name: body.name,
-          lastUpdatedTime: body.lastUpdatedTime,
         },
       })
       .catch((err) => {

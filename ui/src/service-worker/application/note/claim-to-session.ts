@@ -6,26 +6,26 @@ import { cloudApi } from './cloud.api';
 
 export async function claimNotesToSession() {
   const db = await LocalDB.getConnection();
+  const viewer = await authService.getSession();
 
-  const session = await authService.getSession();
-  if (!session?.current) return;
+  if (!viewer?.current || !db) return;
 
   try {
-    const docs = await db.note.toArray();
-    if (docs?.length) {
-      const unclaimed = docs.filter(({ viewerId }) => !viewerId);
+    const notes = await db.note.toArray();
+    if (notes?.length) {
+      const unclaimed = notes.filter(({ userId }) => !userId);
 
-      for (const doc of unclaimed) {
+      for (const unclaimedNote of unclaimed) {
         const created = await cloudApi.create({
           payload: {
-            ...doc,
-            userId: session.current.id,
+            ...unclaimedNote,
+            userId: viewer.current.id,
           },
         });
 
         if (created.success?.ok) {
-          db.note.update(doc.id, {
-            viewerId: session.current.id,
+          db.note.update(unclaimedNote.id, {
+            userId: viewer.current.id,
           });
           swMessageChannel.post(NOTE_MESSAGES.SAVED_TO_CLOUD);
         }

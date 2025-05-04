@@ -54,18 +54,19 @@ export function createEffect<
 
       return await runner(args, { signal: controller.signal })
         .then((output) => {
-          runInAction(() => {});
-          meta.status = 'fulfilled';
+          runInAction(() => {
+            meta.status = 'fulfilled';
+          });
           return { data: output };
         })
         .catch((error) => {
-          runInAction(() => {});
-          meta.status = 'rejected';
+          runInAction(() => {
+            meta.status = 'rejected';
+          });
           let errorOutput: EitherErrorOutput<Error>;
 
           if (error instanceof EffectError) {
             errorOutput = { payload: error.payload as Error };
-            console.log(errorOutput);
           } else if (error instanceof EffectCanceledError) {
             errorOutput = { canceled: EFFECT_CANCELED };
           } else {

@@ -4,13 +4,13 @@ import { Settings } from '~/interface/routes/auth/settings';
 import { SignIn } from '~/interface/routes/auth/sign-in';
 import { Editor } from '~/interface/routes/editor';
 import { Home } from '~/interface/routes/home';
-import { withGuard } from './with-guard';
+import { withAuthGuard, withGuestGuard } from './guards';
 
 export const Pages = {
   Home,
   About,
-  SignIn,
+  SignIn: withGuestGuard(SignIn),
   AccessDenied,
   Editor,
-  Settings: withGuard(Settings, ['USER']),
+  Settings: withAuthGuard(Settings, ['USER']),
 };

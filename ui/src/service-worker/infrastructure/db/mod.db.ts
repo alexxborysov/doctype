@@ -1,6 +1,6 @@
 import Dexie from 'dexie';
 import { Note } from '~/domain/note';
-import { Viewer } from '~/domain/viewer';
+import { Viewer, ViewerId } from '~/domain/viewer';
 import { type ParsedRequest } from '../lib/request.parser';
 
 export class LocalDB extends Dexie {
@@ -16,7 +16,7 @@ export class LocalDB extends Dexie {
     return LocalDB.self!;
   }
 
-  note!: Dexie.Table<Note, string>;
+  note!: Dexie.Table<OmitStrict<Note, 'viewerId'> & { userId?: ViewerId }, string>;
 
   networkSchedulerRequest!: Dexie.Table<{ id: string; req: ParsedRequest }, string>;
   authTokens!: Dexie.Table<{ id: 'singleton'; access: string; refresh: string }, string>;

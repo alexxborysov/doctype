@@ -1,5 +1,5 @@
 import type { Option } from 'core';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import type { Note, NoteId, NoteName } from '~/domain/note';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
@@ -7,10 +7,10 @@ import { notesManagerModel, type NoteManagerModelInterface } from '../manager/mo
 import { api } from './api';
 
 export class NoteRenameModel {
-  process: Option<{
-    id: NoteId;
-    input: NoteName;
-    initial: NoteName;
+  state: Option<{
+    noteId: NoteId;
+    enteredName: NoteName;
+    initialName: NoteName;
   }> = null;
 
   constructor(private noteManagerModel: NoteManagerModelInterface) {
@@ -18,40 +18,35 @@ export class NoteRenameModel {
   }
 
   start(note: Note) {
-    this.process = {
-      id: note.id,
-      initial: note.name,
-      input: note.name,
+    this.state = {
+      noteId: note.id,
+      initialName: note.name,
+      enteredName: note.name,
     };
   }
 
   update(payload: Pick<Note, 'name'>) {
-    const currentProcess = this.process;
-    if (currentProcess) {
-      runInAction(() => {
-        this.process = {
-          ...currentProcess,
-          input: payload.name,
-        };
-      });
-    }
+    if (this.state) this.state.enteredName = payload.name;
+  }
+
+  reset() {
+    this.state = null;
   }
 
   apply = createEffect(async () => {
-    const isDirty = this.process?.initial !== this.process?.input;
-    const canApply = this.process && isDirty;
+    const isChanged = this.state?.initialName !== this.state?.enteredName;
+    const canApply = this.state && isChanged;
 
     if (canApply) {
-      const preparedName = this.process!.input?.length
-        ? (this.process!.input.trim() as NoteName)
-        : (this.process!.initial as NoteName);
+      const preparedName = this.state!.enteredName?.length
+        ? (this.state!.enteredName.trim() as NoteName)
+        : (this.state!.initialName as NoteName);
       const renameQuery = await api.rename({
         data: {
-          id: this.process!.id,
+          id: this.state!.noteId,
           name: preparedName,
         },
       });
-
       if (renameQuery.success?.ok) {
         await this.noteManagerModel.pull.run();
       } else {
@@ -59,9 +54,7 @@ export class NoteRenameModel {
       }
     }
 
-    runInAction(() => {
-      this.process = null;
-    });
+    this.reset();
   });
 }
 

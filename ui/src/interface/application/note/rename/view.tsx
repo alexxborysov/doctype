@@ -6,7 +6,7 @@ import { Note, NoteName } from '~/domain/note';
 import { noteRenameModel } from './model';
 
 export const Name = observer((note: Note) => {
-  const process = noteRenameModel.process;
+  const process = noteRenameModel.state;
 
   const inputNodeRef = useClickOutside(() => {
     noteRenameModel.apply.run();
@@ -27,16 +27,16 @@ export const Name = observer((note: Note) => {
 
   useEffect(() => {
     if (process && inputNodeRef.current) {
-      const caretPosition = process.initial.length;
+      const caretPosition = process.initialName.length;
       inputNodeRef.current.setSelectionRange(caretPosition, caretPosition);
     }
-  }, [process?.id]);
+  }, [process?.noteId]);
 
-  if (process?.id === note.id) {
+  if (process?.noteId === note.id) {
     return (
       <TextInput
         ref={inputNodeRef}
-        value={process.input}
+        value={process.enteredName}
         onChange={update}
         onKeyDown={(event) => {
           if (event.key === 'Escape' || event.key === 'Enter') {

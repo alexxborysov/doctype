@@ -24,13 +24,13 @@ export function registerNoteRoutes() {
         ...parsedBody,
         id: generateId(),
         lastUpdatedTime: dayjs().toString(),
-      } as Note;
+      } as OmitStrict<Note, 'viewerId'>;
 
       if (viewer?.current) {
-        await db.note.add({ ...payload, viewerId: viewer.current.id });
+        await db.note.add({ ...payload, userId: viewer.current.id });
         networkScheduler.post({
           req: ev.request,
-          payload: { ...payload, viewerId: viewer.current.id },
+          payload: { ...payload, userId: viewer.current.id },
         });
       } else {
         await db.note.add(payload);
@@ -135,10 +135,17 @@ export function registerNoteRoutes() {
             const upgradeRequired = dayjs(remoteNote.lastUpdatedTime).isAfter(
               localNote.lastUpdatedTime
             );
-
             if (upgradeRequired) {
               await db.note
                 .update(localNote.id, remoteNote)
+                .then(() => (updated = true))
+                .catch(() => {});
+            }
+
+            const shouldTakeRemoteName = localNote.name !== remoteNote.name;
+            if (shouldTakeRemoteName) {
+              await db.note
+                .update(localNote.id, { name: remoteNote.name })
                 .then(() => (updated = true))
                 .catch(() => {});
             }

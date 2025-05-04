@@ -21,7 +21,7 @@ export const QuickStart = observer(() => {
         Seamless note-taking tool
       </h1>
 
-      <p className="flex space-x-2 items-center">
+      <div className="flex space-x-2 items-center">
         <Button onClick={handleGenerate} size="sm" variant="outline" className="h-[35px] mr-1">
           Generate sample <RocketIcon className="ml-2" />
         </Button>
@@ -37,7 +37,7 @@ export const QuickStart = observer(() => {
             <p className="text-[15px]">N</p>
           </Kbd>
         </div>
-      </p>
+      </div>
     </div>
   );
 });
