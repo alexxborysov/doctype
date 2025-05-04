@@ -31,7 +31,7 @@ export const Editor = () => {
       }}
       className="flex w-full px-[1%] lg:px-[2%] items-start justify-center relative min-h-[95vh]"
     >
-      <Suspense fallback={<BaseLoader position="centered" />}>
+      <Suspense fallback={<BaseLoader className="fixed bottom-4 right-5" />}>
         <EditorView noteSourceModel={new NoteSourceModel({ id: noteId }, notesManagerModel)} />
       </Suspense>
     </m.main>

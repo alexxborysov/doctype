@@ -3,11 +3,9 @@ import { Tab } from './types';
 
 class SignInViewModel {
   tab: Tab = 'registration';
-
   constructor() {
     makeAutoObservable(this);
   }
-
   changeTab(payload: Tab) {
     this.tab = payload;
   }

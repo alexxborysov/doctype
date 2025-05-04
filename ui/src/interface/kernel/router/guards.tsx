@@ -16,6 +16,10 @@ export function withAuthGuard(
   return observer(function RouteElement(props: Record<string, unknown>) {
     const viewer = viewerModel.viewer;
 
+    if (viewerModel.init.meta.status !== 'fulfilled') {
+      return <BaseLoader className="fixed bottom-4 right-5" />;
+    }
+
     if (!viewer?.role || !isAccessGranted(viewer.role, permissibleRoles)) {
       return <Navigate to={redirectTo || '/access-denied'} replace />;
     }
@@ -37,7 +41,7 @@ export function withGuestGuard(Component: FunctionComponent, redirectTo?: RouteP
     const viewer = viewerModel.viewer;
 
     if (viewerModel.init.meta.status !== 'fulfilled') {
-      return <BaseLoader position="centered" className="fixed top-1/2 left-1/2 -mt-[4dvh]" />;
+      return <BaseLoader className="fixed bottom-4 right-5" />;
     }
 
     if (viewer) {

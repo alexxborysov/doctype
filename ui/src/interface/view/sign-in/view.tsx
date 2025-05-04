@@ -20,7 +20,7 @@ export const SignIn = observer(() => {
         tab: 'aria-[selected="false"]:hover:bg-background data-[active]:bg-cyan-500/10',
       }}
       orientation="horizontal"
-      className="w-[84%] sm:w-[60%] md:w-[55%] lg:w-[43%] xl:w-[38%] 2xl:w-[31%]"
+      className="w-full"
     >
       <Tabs.List grow className="mb-5 space-x-2 bg-background">
         <Tabs.Tab

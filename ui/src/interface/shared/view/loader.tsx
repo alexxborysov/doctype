@@ -44,14 +44,10 @@ const styles = cva(
         md: ['h-4 w-4 border-[2px]'],
         lg: ['h-7 w-7 border-[2px]'],
       },
-      position: {
-        centered: 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-[30vh]',
-      },
     },
     defaultVariants: {
       color: 'blue',
       size: 'md',
-      position: null,
     },
   }
 );
