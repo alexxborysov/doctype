@@ -23,7 +23,7 @@ export const notifications = {
         message: 'Sign In to sync your progress with Cloud!',
         autoClose: 10000,
       });
-    }, 7500);
+    }, 15500);
   },
 
   oauthFailed() {

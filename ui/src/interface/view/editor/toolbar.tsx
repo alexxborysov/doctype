@@ -20,7 +20,7 @@ export function EditorToolbar({ editor }: { editor: Editor | null }) {
     <Portal>
       <Paper
         shadow="sm"
-        className="px-3 py-2 fixed bottom-1/2 right-5 transform translate-y-1/2 space-y-2 flex  flex-col items-center justify-center z-50 overflow-hidden"
+        className="px-3 py-3 fixed bottom-1/2 bg-secondary/50 right-4 transform translate-y-1/2 space-y-2 flex flex-col items-center justify-center z-50 overflow-hidden"
       >
         <Button
           action={() => editor.chain().focus().setHeading({ level: 3 }).run()}
@@ -92,7 +92,7 @@ function Button({
   return (
     <button onClick={action} className="relative w-5 h-5">
       <IconSlot
-        className={twMerge('w-[18px] h-[18px] text-zinc-300', isActive && 'text-cyan-400')}
+        className={twMerge('w-[18px] h-[18px] text-zinc-400', isActive && 'text-cyan-400')}
       />
       <span className="absolute -bottom-[4px] -right-[5px] text-[9px] text-gray-500">
         {numberLabel}
