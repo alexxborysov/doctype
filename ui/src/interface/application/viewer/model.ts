@@ -1,7 +1,8 @@
 import { Option } from 'core';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, reaction } from 'mobx';
 import { AUTH_MESSAGES } from '~/domain/auth';
 import { Viewer } from '~/domain/viewer';
+import { Sentry } from '~/interface/shared/analytics/sentry';
 import { createEffect } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
 import { messageChannel } from '~/interface/shared/message-channel/mod.message-channel';
@@ -23,6 +24,14 @@ class ViewerModel {
     window.addEventListener('online', () => {
       this.defineSession.run();
     });
+
+    reaction(
+      () => this.viewer,
+      (viewer) => {
+        Sentry.setTag('viewer_email', viewer?.email);
+        Sentry.setTag('viewer_user_id', viewer?.id);
+      }
+    );
   });
 
   upsert(payload: Viewer) {

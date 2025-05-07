@@ -12,6 +12,10 @@ interface ImportMetaEnv {
   VITE_GOOGLE_CLIENT_ID: string;
 
   VITE_GITHUB_APP_CLIENT_ID: string;
+
+  VITE_SENTRY_DSN: string;
+
+  VITE_ENV: 'development' | 'production';
 }
 
 interface ImportMeta {

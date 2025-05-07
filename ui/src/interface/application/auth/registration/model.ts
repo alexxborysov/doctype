@@ -2,6 +2,7 @@ import { Option, SignUpDto } from 'core';
 import { makeAutoObservable } from 'mobx';
 import { z } from 'zod';
 import { ViewerEmail } from '~/domain/viewer';
+import { logger } from '~/interface/kernel/analytics/logger';
 import { createEffect, EffectError } from '~/interface/shared/lib/create-effect';
 import { notifications } from '~/interface/shared/lib/notifications';
 import { signInViewModel, SignInViewModelInterface } from '~/interface/view/sign-in/model';
@@ -44,6 +45,14 @@ class RegistrationModel {
       this.upsertCredentials({ email: createdUser.email });
       this.changeStep('verification');
     } else {
+      logger.error('Registration failed', {
+        tags: {
+          feature: 'authorization',
+        },
+        extra: {
+          query,
+        },
+      });
       throw new EffectError({
         message: query.error?.response?.data.message || UNEXPECTED_ERROR_MESSAGE,
       });
@@ -61,6 +70,14 @@ class RegistrationModel {
       this.signInViewModel.changeTab('log-in');
       this.changeStep('receiving-credentials');
     } else {
+      logger.error('Email verification failed', {
+        tags: {
+          feature: 'authorization',
+        },
+        extra: {
+          query,
+        },
+      });
       throw new EffectError({
         message: query.error?.response?.data.message || UNEXPECTED_ERROR_MESSAGE,
       });

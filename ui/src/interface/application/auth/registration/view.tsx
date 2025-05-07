@@ -36,7 +36,6 @@ const SignUpForm = observer(() => {
       }
     >
       <Input name="email" type="email" label="Email" />
-
       <Input name="password" type="password" label="Password" />
       <Input name="confirm" type="password" label="Confirm a password" />
     </Form>

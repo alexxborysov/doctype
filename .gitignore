@@ -6,7 +6,7 @@ dist-es
 
 .env
 .env.origin
-
+.env.sentry-build-plugin
 .env.production
 
 .DS_Store

@@ -16,7 +16,7 @@ class NotesManagerModel {
   pool: Note[] = [];
   lasOpenedNoteId: Option<NoteId> = null;
 
-  constructor(private sessionModel: ViewerModelInterface) {
+  constructor(private viewerModel: ViewerModelInterface) {
     makeAutoObservable(this);
     this.init.run();
   }
@@ -28,7 +28,7 @@ class NotesManagerModel {
     this.lasOpenedNoteId = lastOpened.get();
 
     reaction(
-      () => this.sessionModel.viewer,
+      () => this.viewerModel.viewer,
       () => this.pullCloud.run()
     );
   });
@@ -75,7 +75,7 @@ class NotesManagerModel {
   });
 
   pullCloud = createEffect(async () => {
-    const session = this.sessionModel.viewer;
+    const session = this.viewerModel.viewer;
     if (!session) {
       throw new EffectError('session is not defined');
     }
