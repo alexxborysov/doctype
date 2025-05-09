@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { Note } from '~/domain/note';
 import { Icon } from '~/interface/shared/view/icon';
 import { Name } from '../../rename/view';
+import { preparePreview } from './prepare-preview';
+import './preview.css';
 import { RemoveModal } from './remove.modal';
 
 export const Preview = observer((props: Note) => {
@@ -35,6 +37,11 @@ export const Preview = observer((props: Note) => {
           root: 'overflow-hidden min-w-[15.6rem] min-h-[11.5rem] h-[11.5rem] max-w-[15.6rem] max-h-[11.5rem] mb-[7px] cursor-pointer relative border-solid border-[1px] border-border overflow-hidden px-3 pt-2 py-[6px]',
         }}
       >
+        <div
+          className="tiptap-preview"
+          dangerouslySetInnerHTML={{ __html: preparePreview(props.source) }}
+        />
+
         {(hovered || removeModalOpened) && (
           <CloseButton
             onClick={openRemoveModal}

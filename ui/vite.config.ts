@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
@@ -8,10 +8,16 @@ import { qrcode } from 'vite-plugin-qrcode';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), qrcode(), compression(), sentryVitePlugin({
-    org: "alex-team",
-    project: "doctype"
-  })],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    qrcode(),
+    compression(),
+    sentryVitePlugin({
+      org: 'alex-team',
+      project: 'doctype',
+    }),
+  ],
   base: './',
   root: './',
 
@@ -39,7 +45,7 @@ export default defineConfig({
       },
     },
 
-    sourcemap: true
+    sourcemap: true,
   },
 
   server: {

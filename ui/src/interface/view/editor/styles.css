@@ -41,14 +41,11 @@
 
           position: relative;
 
-          @apply bg-cyan-100 border-border border;
+          @apply bg-cyan-200/40 border-border border;
         }
 
         input:checked {
-          background-color: #339af0;
-          border-color: #339af0;
-
-          @apply bg-cyan-500 border-cyan-700 border;
+          @apply bg-cyan-600 border-cyan-800 border;
         }
 
         input:checked::after {
@@ -108,15 +105,11 @@
   h6 {
     line-height: 1.2;
     text-wrap: pretty;
-
-    &:first-child {
-      font-size: 1.5rem;
-    }
   }
 
   h1 {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 14px;
   }
 
   h3 {

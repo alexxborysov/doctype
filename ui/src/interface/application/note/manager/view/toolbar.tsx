@@ -1,10 +1,13 @@
 import { Divider, Kbd, Paper, Portal } from '@mantine/core';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
+import { cn } from '~/interface/shared/lib/cn';
 import { Search } from '../../search/view';
 import { notesManagerModel } from '../model';
 
 export const Toolbar = observer(() => {
+  const hidden = !notesManagerModel.pool.length;
+
   useEffect(() => {
     const handleCreateShortcut = (event: KeyboardEvent) => {
       const triggered = event.altKey && event.code === 'KeyN';
@@ -24,7 +27,10 @@ export const Toolbar = observer(() => {
     <Portal>
       <Paper
         shadow="sm"
-        className="px-3 py-2 fixed bottom-5 left-[50%] transform -translate-x-[50%] space-x-3 flex items-center justify-center z-50 overflow-hidden"
+        className={cn(
+          'px-3 py-2 fixed bottom-5 left-[50%] transform -translate-x-[50%] space-x-3 flex items-center justify-center z-50 overflow-hidden',
+          hidden && 'hidden'
+        )}
       >
         <Search />
 
