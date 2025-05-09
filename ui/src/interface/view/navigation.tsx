@@ -28,7 +28,6 @@ export const AppNavigation = observer(() => {
         )}
 
         <HomeSegment />
-        <EditorSegment />
       </section>
 
       <section className="flex flex-col items-center justify-center space-y-2">
@@ -59,21 +58,6 @@ const HomeSegment = () => {
         onClick={createNote}
         content={<Pencil2Icon className="w-[1.11rem] h-[1.11rem]  text-accent" />}
         ariaLabel="create-new-note"
-      />
-    </section>
-  );
-};
-
-const EditorSegment = () => {
-  const location = useLocationArray();
-  const show = location[0] === 'notes';
-
-  return (
-    <section hidden={!show}>
-      <AppActionButton
-        onClick={() => null}
-        content={<Icon name="share" className="w-[1.11rem] h-[1.11rem] text-accent" />}
-        ariaLabel="share-note"
       />
     </section>
   );

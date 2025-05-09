@@ -25,7 +25,9 @@ class NotesManagerModel {
     await serviceWorkerState.activated;
 
     this.pull.run();
-    this.lasOpenedNoteId = lastOpened.get();
+    runInAction(() => {
+      this.lasOpenedNoteId = lastOpened.get();
+    });
 
     reaction(
       () => this.viewerModel.viewer,
@@ -93,7 +95,7 @@ class NotesManagerModel {
 
   setLastOpenedNote(id: Note['id']) {
     this.lasOpenedNoteId = id;
-    localStorage.setItem('last-opened-note', id);
+    lastOpened.set(id);
   }
 
   generateSample = createEffect(async () => {
@@ -107,11 +109,12 @@ messageChannel.on(NOTE_MESSAGES.SAVED_TO_CLOUD, () => {
 });
 
 export const lastOpened = {
+  __tag: 'last-opened-note-id',
   get() {
-    return localStorage.getItem('last-opened-note-id') as NoteId;
+    return localStorage.getItem(lastOpened.__tag) as NoteId;
   },
   set(id: NoteId) {
-    return localStorage.setItem('last-opened-note-id', id);
+    return localStorage.setItem(lastOpened.__tag, id);
   },
 };
 
