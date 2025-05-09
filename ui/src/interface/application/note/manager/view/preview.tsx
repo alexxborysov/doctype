@@ -34,7 +34,7 @@ export const Preview = observer((props: Note) => {
         onClick={openNote}
         shadow={(hovered && 'xs') || undefined}
         classNames={{
-          root: 'overflow-hidden min-w-[15.6rem] min-h-[11.5rem] h-[11.5rem] max-w-[15.6rem] max-h-[11.5rem] mb-[7px] cursor-pointer relative border-solid border-[1px] border-border overflow-hidden px-3 pt-2 py-[6px]',
+          root: 'overflow-hidden min-w-[15.6rem] min-h-[11.5rem] h-[11.5rem] w-full max-h-[11.5rem] mb-[7px] cursor-pointer relative border-solid border-[1px] border-border overflow-hidden px-3 pt-2 py-[6px]',
         }}
       >
         <div

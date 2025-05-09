@@ -7,6 +7,7 @@ import { NoteSourceModel } from '../application/note/source/model';
 import { router } from '../kernel/router/mod.router';
 import { notifications } from '../shared/lib/notifications';
 import { BaseLoader } from '../shared/view/loader';
+import { Transition } from '../shared/view/transition';
 
 const EditorView = lazy(async () =>
   import('~/interface/view/editor/mod.editor').then((mod) => ({ default: mod.EditorView }))
@@ -32,7 +33,11 @@ export const Editor = () => {
       className="flex w-full px-[1%] lg:px-[2%] items-start justify-center relative min-h-[95vh]"
     >
       <Suspense fallback={<BaseLoader className="fixed bottom-4 right-5" />}>
-        <EditorView noteSourceModel={new NoteSourceModel({ id: noteId }, notesManagerModel)} />
+        <Transition>
+          <EditorView
+            noteSourceModel={new NoteSourceModel({ id: noteId }, notesManagerModel)}
+          />
+        </Transition>
       </Suspense>
     </m.main>
   );

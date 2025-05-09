@@ -14,7 +14,7 @@
   mask-image: linear-gradient(to bottom, black 94%, transparent);
 
   p {
-    font-size: 7px;
+    font-size: 9px;
   }
 
   hr {
@@ -105,7 +105,7 @@
     background: linear-gradient(to right, #e0fffa, #e0fffa);
     border-radius: 4px;
     color: black;
-    font-size: 7px;
+    font-size: 9px;
     font-family: 'JetBrainsMono', monospace;
     padding: 0.28em 0.4em;
   }
@@ -120,7 +120,7 @@
     font-size: 5px;
 
     code {
-      font-size: 7px;
+      font-size: 9px;
       background: none;
       color: inherit;
       padding: 0;
@@ -128,7 +128,7 @@
   }
 
   ol.orderedList {
-    font-size: 7px;
+    font-size: 9px;
 
     list-style: numeric;
 
@@ -141,7 +141,7 @@
   }
 
   ul.bulletList {
-    font-size: 7px;
+    font-size: 9px;
 
     list-style-type: disc;
     &:nth-child(2) {

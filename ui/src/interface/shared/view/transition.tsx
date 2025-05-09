@@ -14,7 +14,7 @@ export function Transition({
   children,
   className = '',
   type = 'fade',
-  duration = 0.12,
+  duration = 0.1,
   delay = 0,
   show = true,
 }: Props) {

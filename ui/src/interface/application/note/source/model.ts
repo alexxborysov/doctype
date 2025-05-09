@@ -27,7 +27,7 @@ export class NoteSourceModel {
 
     const pullQuery = await api.getById({ id: this.id });
     const source = pullQuery.success?.note.source;
-
+    console.log('pull ', pullQuery);
     if (source) {
       runInAction(() => {
         this.source = source;
