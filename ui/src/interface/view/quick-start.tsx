@@ -15,25 +15,23 @@ export const QuickStart = observer(() => {
   return (
     <div className="min-h-screen flex items-center justify-center flex-col -mt-[10vh] gap-2">
       <h1
-        className="flex items-center text-[27px] tracking-wide text-white gap-x-1 cursor-pointer"
+        className="flex items-center text-[31px] tracking-wider text-white gap-x-1 cursor-pointer "
         onClick={openAboutPage}
       >
-        Seamless note-taking tool
+        Litte.in
       </h1>
 
       <div className="flex space-x-2 items-center">
         <Button onClick={handleGenerate} size="sm" variant="outline" className="h-[35px] mr-1">
           Generate sample <RocketIcon className="ml-2" />
         </Button>
-        <span className="font-['JetBrainsMono'] tracking-wide text-gray-400">
-          or create yours with
-        </span>
+        <span className=" tracking-wide text-cyan-300/70">or create yours with</span>
         <div className="px-2 py-2 space-x-2 flex items-center justify-center ">
           <Kbd className="h-8 w-8">
             <p className="-mt-[4px] text-[20px]">⌥</p>
           </Kbd>
-          <span className="text-gray-400">+</span>
-          <Kbd className="h-8 w-8 text-center font-['JetBrainsMono']">
+          <span className="text-cyan-300/70">+</span>
+          <Kbd className="h-8 w-8 text-center">
             <p className="text-[15px]">N</p>
           </Kbd>
         </div>

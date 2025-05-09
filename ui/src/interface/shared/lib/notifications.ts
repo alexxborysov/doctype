@@ -4,7 +4,7 @@ export const notifications = {
   accountCreated() {
     _notifications.show({
       title: 'Account Created',
-      message: 'Welcome to Doctype!',
+      message: 'Welcome to Litte.in!',
       autoClose: 5000,
     });
   },

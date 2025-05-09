@@ -5,12 +5,11 @@ export const About = () => {
     <main className="flex flex-col w-full px-4 lg:px-8 mt-3 items-center justify-center h-fit">
       <section className="max-w-3xl text-left items-start pb-20">
         <h3 className="mb-4 text-2xl font-demi text-primary">
-          Progressive web tool designed for seamless note-taking and enhanced productivity.
+          Progressive web tool designed for simple note-taking.
         </h3>
         <ul className="space-y-2 text-left">
           <li className="text-lg text-zinc-300">
-            <span className="font-medium mr-[1px]">•</span> Keyboard shortcuts to improve
-            efficiency.
+            <span className="font-medium mr-[1px]">•</span> Keyboard shortcuts.
           </li>
           <li className="text-lg text-zinc-300">
             <span className="font-medium mr-[1px]">•</span> The ability to work offline or in
@@ -61,7 +60,7 @@ export const About = () => {
           or
           <a
             target="_blank"
-            href="https://github.com/alexphloyd/doctype/issues"
+            href="https://github.com/alexxborysov/litte.in/issues"
             className="text-blue-500 hover:underline mx-1 underline-offset-2"
           >
             create an issue

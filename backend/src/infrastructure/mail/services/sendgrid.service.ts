@@ -25,7 +25,7 @@ export class SendgridService {
       this.mailService.send({
         from: this.from,
         to: email,
-        subject: 'Welcome to Doctype',
+        subject: 'Welcome to Litte.in',
         templateId: SEND_VERIFICATION_CODE_TEMPLATE,
         dynamicTemplateData: {
           code,
