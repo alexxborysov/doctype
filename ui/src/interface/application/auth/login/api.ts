@@ -7,14 +7,14 @@ import { LoginDto } from 'core/src';
 import { GoogleToken } from '../oauth/google';
 
 export const api = {
-  async login({ data }: { data: z.infer<typeof LoginDto> }) {
+  async login({ payload }: { payload: z.infer<typeof LoginDto> }) {
     return apiClient.query<{
       tokens: AuthTokens;
       user: Viewer;
     }>({
       url: 'auth/login',
       method: 'POST',
-      data,
+      data: payload,
     });
   },
 

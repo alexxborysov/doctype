@@ -9,7 +9,7 @@ import { Icon } from '~/interface/shared/view/icon';
 import { Name } from '../../rename/view';
 import { preparePreview } from './prepare-preview';
 import './preview.css';
-import { RemoveModal } from './remove.modal';
+import { RemoveNoteModal } from './remove.modal';
 
 export const Preview = observer((props: Note) => {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export const Preview = observer((props: Note) => {
         {dayjs(props.lastUpdatedTime).format('D MMMM h:mm A').toString()}
       </span>
 
-      <RemoveModal note={props} opened={removeModalOpened} onClose={closeRemoveModal} />
+      <RemoveNoteModal note={props} opened={removeModalOpened} onClose={closeRemoveModal} />
     </li>
   );
 });

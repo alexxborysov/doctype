@@ -14,8 +14,8 @@ export default defineConfig({
     qrcode(),
     compression(),
     sentryVitePlugin({
-      org: 'alex-team',
-      project: 'doctype',
+      org: 'litte-in-fe',
+      project: 'litte-in-fe',
     }),
   ],
   base: './',

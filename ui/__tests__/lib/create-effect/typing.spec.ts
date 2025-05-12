@@ -3,14 +3,14 @@ import {
   createEffect,
   EffectCanceledError,
   EffectError,
-  EitherErrorOutput,
+  ErrorOutput,
 } from '~/interface/shared/lib/create-effect';
 
 describe('[lib]:create-effect:typing', () => {
   it('infers SuccessOutput from the runner function', async () => {
     const effect = createEffect(async () => 'OUTPUT');
     const result = await effect.run();
-    expectTypeOf(result.data).toEqualTypeOf<string | undefined>();
+    expectTypeOf(result.success).toEqualTypeOf<string | undefined>();
   });
 
   it('produces correct error type when runner throws an EffectError', async () => {
@@ -18,9 +18,7 @@ describe('[lib]:create-effect:typing', () => {
       throw new EffectError({ message: 'error occurred' });
     });
     const output = await effect.run();
-    expectTypeOf(output.error).toMatchTypeOf<
-      EitherErrorOutput<{ message: string }> | undefined
-    >();
+    expectTypeOf(output.error).toMatchTypeOf<ErrorOutput<{ message: string }> | undefined>();
   });
 
   it('produces correct error type when runner throws a CanceledError', async () => {
@@ -29,7 +27,7 @@ describe('[lib]:create-effect:typing', () => {
     });
     const output = await effect.run();
     expectTypeOf(output.error).toMatchTypeOf<
-      EitherErrorOutput<{ message: string }> | undefined | undefined
+      ErrorOutput<{ message: string }> | undefined | undefined
     >();
   });
 
@@ -39,7 +37,7 @@ describe('[lib]:create-effect:typing', () => {
     });
     const output = await effect.run();
     expectTypeOf(output.error).toMatchTypeOf<
-      EitherErrorOutput<{ message: string }> | undefined | undefined
+      ErrorOutput<{ message: string }> | undefined | undefined
     >();
   });
 
@@ -47,11 +45,11 @@ describe('[lib]:create-effect:typing', () => {
     const effect = createEffect<number, { message: string }>(async () => 42, { once: true });
 
     const first = await effect.run();
-    expectTypeOf(first.data).toEqualTypeOf<number | undefined>();
+    expectTypeOf(first.success).toEqualTypeOf<number | undefined>();
 
     const second = await effect.run();
     expectTypeOf(second.error).toMatchTypeOf<
-      EitherErrorOutput<{ message: string }> | undefined | undefined
+      ErrorOutput<{ message: string }> | undefined | undefined
     >();
   });
 });

@@ -22,7 +22,7 @@ class LoginModel {
   }
 
   login = createEffect(async (creds: z.infer<typeof LoginDto>) => {
-    const query = await api.login({ data: creds });
+    const query = await api.login({ payload: creds });
     const viewer = query.success?.user;
 
     if (viewer) {

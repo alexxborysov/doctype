@@ -5,7 +5,6 @@ import { describe, it, expect, afterAll, afterEach, beforeAll, vi } from 'vitest
 import { apiClient } from '~/interface/shared/api-client/mod.api-client';
 import {
   createEffect,
-  UNEXPECTED_ERROR,
   EffectError,
   EffectCanceledError,
   EFFECT_CANCELED,
@@ -34,9 +33,9 @@ describe('[lib]:create-effect:either', () => {
 
   it('should return output on successful execution', async () => {
     const effect = createEffect(async () => SUCCESS_OUTPUT);
-    const { data, error } = await effect.run();
+    const { success, error } = await effect.run();
 
-    expect(data).toBe(SUCCESS_OUTPUT);
+    expect(success).toBe(SUCCESS_OUTPUT);
     expect(error).toBeUndefined();
 
     expect(effect.meta.status).toBe('fulfilled');
@@ -47,13 +46,11 @@ describe('[lib]:create-effect:either', () => {
     const effect = createEffect(async () => {
       throw new EffectError();
     });
-    const { data, error } = await effect.run();
-
-    expect(data).toBeUndefined();
-    expect(error).toEqual({ unexpected: UNEXPECTED_ERROR });
-
+    const { success, error } = await effect.run();
+    expect(success).toBeUndefined();
+    expect(error).toEqual({ payload: null });
     expect(effect.meta.status).toBe('rejected');
-    expect(effect.meta.error?.unexpected).toBeDefined();
+    expect(effect.meta.error?.payload).toBeDefined();
   });
 
   it('should handle EffectError properly', async () => {
@@ -61,9 +58,9 @@ describe('[lib]:create-effect:either', () => {
     const effect = createEffect(async () => {
       throw new EffectError(ERROR_PAYLOAD);
     });
-    const { data, error } = await effect.run();
+    const { success, error } = await effect.run();
 
-    expect(data).toBeUndefined();
+    expect(success).toBeUndefined();
     expect(error).toBeDefined();
     expect(error?.payload).toStrictEqual(ERROR_PAYLOAD);
 
@@ -89,9 +86,9 @@ describe('[lib]:create-effect:either', () => {
     });
 
     setTimeout(effect.cancel, 5);
-    const { data, error } = await effect.run();
+    const { success, error } = await effect.run();
 
-    expect(data).toBeUndefined();
+    expect(success).toBeUndefined();
     expect(error).toEqual({ canceled: EFFECT_CANCELED });
 
     expect(effect.meta.status).toBe('rejected');
@@ -106,8 +103,8 @@ describe('[lib]:create-effect:either', () => {
     });
     await effect.run();
 
-    const { data, error } = await effect.run();
-    expect(data).toBeUndefined();
+    const { success, error } = await effect.run();
+    expect(success).toBeUndefined();
     expect(error).toEqual({ onceRestriction: EFFECT_ONCE_RESTRICTION });
     expect(effect.meta.status).toBe('fulfilled');
 

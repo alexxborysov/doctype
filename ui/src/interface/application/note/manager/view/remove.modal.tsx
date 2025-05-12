@@ -8,11 +8,11 @@ interface Props {
   note: Note;
 }
 
-export const RemoveModal = (props: Props) => {
-  const removeEffect = () => {
+export const RemoveNoteModal = (props: Props) => {
+  function removeNote() {
     notesManagerModel.remove.run({ id: props.note.id });
     props.onClose();
-  };
+  }
 
   return (
     <Modal
@@ -30,7 +30,7 @@ export const RemoveModal = (props: Props) => {
       withCloseButton={false}
       onKeyUp={(event) => {
         if (event.key === 'Enter') {
-          removeEffect();
+          removeNote();
         }
       }}
     >
@@ -53,7 +53,7 @@ export const RemoveModal = (props: Props) => {
           Cancel
         </Button>
         <Button
-          onClick={removeEffect}
+          onClick={removeNote}
           size="sm"
           classNames={{
             root: 'w-fit min-w-[30%]',

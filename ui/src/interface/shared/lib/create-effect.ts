@@ -12,10 +12,10 @@ export const UNEXPECTED_ERROR = 'UNEXPECTED_ERROR' as const;
  */
 export function createEffect<
   Success = unknown,
-  Error = { message: Option<ErrorMessage> },
+  ErrorPayload = { message: Option<ErrorMessage> },
   Params = void,
 >(runner: Runner<Success, Params>, options: { once?: boolean } = { once: false }) {
-  const meta: Meta<Error> = observable({
+  const meta: Meta<ErrorPayload> = observable({
     status: 'idle',
     promise: null,
     error: null,
@@ -32,7 +32,7 @@ export function createEffect<
   return {
     meta,
     cancel,
-    run: async (args: Params): RunnerEitherOutput<Success, Error> => {
+    run: async (args: Params): RunnerEitherOutput<Success, ErrorPayload> => {
       const restrictedByOnce = options.once && meta.status !== 'idle';
       if (restrictedByOnce) {
         runInAction(() => {
@@ -53,30 +53,21 @@ export function createEffect<
       });
 
       return await runner(args, { signal: controller.signal })
-        .then((output) => {
+        .then((runnerOutput) => {
           runInAction(() => {
             meta.status = 'fulfilled';
           });
-          return { data: output };
+          return { success: runnerOutput };
         })
-        .catch((error) => {
+        .catch((runnerError) => {
           runInAction(() => {
             meta.status = 'rejected';
           });
-          let errorOutput: EitherErrorOutput<Error>;
-
-          if (error instanceof EffectError) {
-            errorOutput = { payload: error.payload as Error };
-          } else if (error instanceof EffectCanceledError) {
-            errorOutput = { canceled: EFFECT_CANCELED };
-          } else {
-            errorOutput = { unexpected: UNEXPECTED_ERROR };
-          }
-
+          const error = withErrorFlags<ErrorPayload>(runnerError);
           runInAction(() => {
-            meta.error = errorOutput;
+            meta.error = error;
           });
-          return { error: errorOutput };
+          return { error };
         })
         .finally(() => {
           metaPromiseResolver?.();
@@ -85,18 +76,28 @@ export function createEffect<
   };
 }
 
+const withErrorFlags = <Payload>(error: unknown): ErrorOutput<Payload> => {
+  if (error instanceof EffectError) {
+    return { payload: error?.payload as Payload };
+  }
+  if (error instanceof EffectCanceledError) {
+    return { canceled: EFFECT_CANCELED };
+  }
+  return { unexpected: UNEXPECTED_ERROR };
+};
+
 export type Runner<Output = unknown, Arguments = void> = (
   args: Arguments,
   options: { signal: AbortSignal }
 ) => Promise<Output>;
 
-export type RunnerEitherOutput<SuccessOutput, ErrorOutputPayload> = Promise<{
-  data?: SuccessOutput;
-  error?: EitherErrorOutput<ErrorOutputPayload>;
+export type RunnerEitherOutput<Success, ErrorOutputPayload> = Promise<{
+  success?: Success;
+  error?: ErrorOutput<ErrorOutputPayload>;
 }>;
 
-export type EitherErrorOutput<ErrorOutput> = ErrorFlags & {
-  payload?: ErrorOutput;
+export type ErrorOutput<Payload> = ErrorFlags & {
+  payload?: Payload;
 };
 
 export type ErrorFlags = {
@@ -106,10 +107,10 @@ export type ErrorFlags = {
 };
 
 export type EffectStatus = 'idle' | 'pending' | 'fulfilled' | 'rejected';
-export type Meta<ErrorOutput> = {
+export type Meta<ErrorPayload> = {
   status: EffectStatus;
-  promise: Promise<void> | null;
-  error: EitherErrorOutput<ErrorOutput> | null;
+  promise: Option<Promise<void>>;
+  error: Option<ErrorOutput<ErrorPayload>>;
 };
 
 export class EffectCanceledError extends Error {
@@ -119,10 +120,10 @@ export class EffectCanceledError extends Error {
   }
 }
 export class EffectError extends Error {
-  payload: unknown | null;
+  payload: Option<unknown>;
   constructor(payload?: unknown) {
     super();
-    this.payload = payload;
+    this.payload = payload ?? null;
     this.name = EFFECT_ERROR;
   }
 }

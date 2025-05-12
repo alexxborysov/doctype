@@ -14,3 +14,20 @@ Object.defineProperty(window, 'scrollTo', {
   value: () => null,
   writable: true,
 });
+
+const mockServiceWorker = {
+  ready: new Promise((res) => {
+    setTimeout(() => {
+      res({
+        active: {
+          state: 'activated',
+        },
+      });
+    }, 100);
+  }),
+};
+
+Object.defineProperty(navigator, 'serviceWorker', {
+  value: mockServiceWorker,
+  writable: true,
+});

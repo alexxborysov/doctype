@@ -38,7 +38,7 @@ class RegistrationModel {
   }
 
   signUp = createEffect(async (creds: z.infer<typeof SignUpDto>) => {
-    const query = await api.signUp({ data: creds });
+    const query = await api.signUp({ payload: creds });
 
     if (query?.success?.createdUser) {
       const createdUser = query.success.createdUser;
@@ -61,7 +61,7 @@ class RegistrationModel {
 
   verify = createEffect(async (payload: z.infer<typeof VerificationSchema>) => {
     const query = await api.verify({
-      data: { code: payload.code, email: this.credentialsInProcess?.email ?? '' },
+      payload: { code: payload.code, email: this.credentialsInProcess?.email ?? '' },
     });
 
     if (query.success) {
